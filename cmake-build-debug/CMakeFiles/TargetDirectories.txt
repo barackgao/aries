@@ -1,0 +1,3 @@
+/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles/aries.dir
