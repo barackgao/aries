@@ -57,38 +57,38 @@ include CMakeFiles/aries.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/aries.dir/flags.make
 
-CMakeFiles/aries.dir/src/main.cpp.o: CMakeFiles/aries.dir/flags.make
-CMakeFiles/aries.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/aries.dir/src/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/aries.dir/src/main.cpp.o -c /Users/barackgao/ClionProjects/aries/src/main.cpp
+CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o: CMakeFiles/aries.dir/flags.make
+CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o: ../src/sourceFiles/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o -c /Users/barackgao/ClionProjects/aries/src/sourceFiles/main.cpp
 
-CMakeFiles/aries.dir/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/aries.dir/src/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/barackgao/ClionProjects/aries/src/main.cpp > CMakeFiles/aries.dir/src/main.cpp.i
+CMakeFiles/aries.dir/src/sourceFiles/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/aries.dir/src/sourceFiles/main.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/barackgao/ClionProjects/aries/src/sourceFiles/main.cpp > CMakeFiles/aries.dir/src/sourceFiles/main.cpp.i
 
-CMakeFiles/aries.dir/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/aries.dir/src/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/barackgao/ClionProjects/aries/src/main.cpp -o CMakeFiles/aries.dir/src/main.cpp.s
+CMakeFiles/aries.dir/src/sourceFiles/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/aries.dir/src/sourceFiles/main.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/barackgao/ClionProjects/aries/src/sourceFiles/main.cpp -o CMakeFiles/aries.dir/src/sourceFiles/main.cpp.s
 
-CMakeFiles/aries.dir/src/main.cpp.o.requires:
+CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.requires:
 
-.PHONY : CMakeFiles/aries.dir/src/main.cpp.o.requires
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.requires
 
-CMakeFiles/aries.dir/src/main.cpp.o.provides: CMakeFiles/aries.dir/src/main.cpp.o.requires
-	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/main.cpp.o.provides.build
-.PHONY : CMakeFiles/aries.dir/src/main.cpp.o.provides
+CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.provides: CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.requires
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.provides.build
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.provides
 
-CMakeFiles/aries.dir/src/main.cpp.o.provides.build: CMakeFiles/aries.dir/src/main.cpp.o
+CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.provides.build: CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o
 
 
 # Object files for target aries
 aries_OBJECTS = \
-"CMakeFiles/aries.dir/src/main.cpp.o"
+"CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o"
 
 # External object files for target aries
 aries_EXTERNAL_OBJECTS =
 
-aries: CMakeFiles/aries.dir/src/main.cpp.o
+aries: CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o
 aries: CMakeFiles/aries.dir/build.make
 aries: CMakeFiles/aries.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable aries"
@@ -99,7 +99,7 @@ CMakeFiles/aries.dir/build: aries
 
 .PHONY : CMakeFiles/aries.dir/build
 
-CMakeFiles/aries.dir/requires: CMakeFiles/aries.dir/src/main.cpp.o.requires
+CMakeFiles/aries.dir/requires: CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.requires
 
 .PHONY : CMakeFiles/aries.dir/requires
 

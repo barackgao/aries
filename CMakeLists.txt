@@ -3,5 +3,5 @@ project(aries)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES src/main.cpp)
+set(SOURCE_FILES src/sourceFiles/main.cpp src/headFiles/main.h)
 add_executable(aries ${SOURCE_FILES})

@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/aries.dir/src/main.cpp.o"
+  "CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o"
   "aries.pdb"
   "aries"
 )

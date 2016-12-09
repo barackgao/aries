@@ -123,32 +123,32 @@ aries/fast:
 	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/build
 .PHONY : aries/fast
 
-src/main.o: src/main.cpp.o
+src/sourceFiles/main.o: src/sourceFiles/main.cpp.o
 
-.PHONY : src/main.o
+.PHONY : src/sourceFiles/main.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/sourceFiles/main.cpp.o:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o
+.PHONY : src/sourceFiles/main.cpp.o
 
-src/main.i: src/main.cpp.i
+src/sourceFiles/main.i: src/sourceFiles/main.cpp.i
 
-.PHONY : src/main.i
+.PHONY : src/sourceFiles/main.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/sourceFiles/main.cpp.i:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/main.cpp.i
+.PHONY : src/sourceFiles/main.cpp.i
 
-src/main.s: src/main.cpp.s
+src/sourceFiles/main.s: src/sourceFiles/main.cpp.s
 
-.PHONY : src/main.s
+.PHONY : src/sourceFiles/main.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/sourceFiles/main.cpp.s:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/main.cpp.s
+.PHONY : src/sourceFiles/main.cpp.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... aries"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/sourceFiles/main.o"
+	@echo "... src/sourceFiles/main.i"
+	@echo "... src/sourceFiles/main.s"
 .PHONY : help
 
 
