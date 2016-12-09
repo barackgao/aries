@@ -1,20 +1,15 @@
 //
 // Created by 高炜 on 16/12/9.
 //
-/*
+
 #ifndef ARIES_SYSTEMPARAMETER_H
 #define ARIES_SYSTEMPARAMETER_H
-//
-// Created by 高炜 on 16/12/5.
-//
-
-#ifndef PETUUM_MODIFY_SYSPARAM_H
-#define PETUUM_MODIFY_SYSPARAM_H
 
 #include <map>
 
 #include "../../thirdParty/usr/include/glog/logging.h"
 #include "../../thirdParty/usr/include/gflags/gflags.h"
+#include "../../thirdParty/usr/include/gflags/gflags_declare.h"
 
 enum machineType { m_coordinator=300, m_scheduler, m_worker };
 
@@ -56,7 +51,5 @@ public:
 };
 
 //sysParam* paramInit(int argc,char* argv[],int mpiRank);
-
-#endif //PETUUM_MODIFY_SYSPARAM_H
 
 #endif //ARIES_SYSTEMPARAMETER_H
