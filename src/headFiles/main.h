@@ -9,6 +9,6 @@
 
 #include "../../thirdParty/usr/include/gflags/gflags.h"
 
-#include "networkInit.h"
+//#include "networkInit.h"
 
 #endif //ARIES_MAIN_H_H

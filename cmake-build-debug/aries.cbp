@@ -83,7 +83,16 @@
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/main.h">
 			<Option target="aries"/>
 		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/network.h">
+			<Option target="aries"/>
+		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/systemParameter.h">
+			<Option target="aries"/>
+		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/main.cpp">
+			<Option target="aries"/>
+		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/systemParameter.cpp">
 			<Option target="aries"/>
 		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/CMakeLists.txt">
