@@ -25,14 +25,15 @@ public:
     std::map<machineType, std::string> m_machineString;
     int64_t m_schedulers;
 
+    systemParameter(){}
     systemParameter(std::string &machineFile,
-             std::string &nodeFile,
-             std::string &linkFile,
-             std::string &rLinkFile,
-             std::string &topology,
-             std::string &psNodeFile,
-             std::string &psLinkFile,
-             int64_t schedulers)
+                    std::string &nodeFile,
+                    std::string &linkFile,
+                    std::string &rLinkFile,
+                    std::string &topology,
+                    std::string &psNodeFile,
+                    std::string &psLinkFile,
+                    int64_t schedulers)
             :m_machineFile(machineFile),
              m_nodeFile(nodeFile),
              m_linkFile(linkFile),
