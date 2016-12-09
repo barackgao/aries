@@ -21,39 +21,40 @@ int network::init(int argc, char **argv) {
     MPI_Comm_size(MPI_COMM_WORLD,&mpiSize);
     this->memberMpiRank = mpiRank;
     this->memberMpiSize = mpiSize;
+    this->memberSchedulerMachineNumber = FLAGS_schedulerMachineNumber;
 
     //TODO: 定义角色
     this->findRole();
 
     //TODO: 初始化系统参数和通信句柄
     this->memberSystemParameter = new systemParameter();
-    this->memberSystemParameter->init(argc, argv, this->memberMpiRank);
+    this->memberSystemParameter->init(argc, argv, this->memberMpiRank, this->memberMpiSize);
 
 }
 
 int network::findRole() {
     machineRole mrole = machineRoleUnknown;
     int schedulerMachineNumber = this->memberSystemParameter->;
-        int firstSchedulerMachine = mpiSize - schedulerMachines - 1;
-        int firstCoordinatorMachine = mpiSize - 1;
+        int firstSchedulerMachineID = memberMpiSize -  - 1;
+        int firstCoordinatorMachineID = memberMpiSize - 1;
 
-        m_schedulerMachines = m_sysParam->m_schedulers;
-        m_firstSchedulerMachine = mpiSize - m_schedulerMachines - 1;
-        m_workerMachines = m_firstSchedulerMachine;
-        m_firstWorkerMachine = 0;
-        m_firstCoordinatorMachine = mpiSize - 1;
+        memberSchedulerMachineNumber = memberSystemParameter->memberSchedulerNumber;
+        memberFirstSchedulerMachineID = memberMpiSize - memberSchedulerMachineNumber - 1;
+        memberWorkerMachineNumber = memberFirstSchedulerMachineID;
+        memberFirstWorkerMachineID = 0;
+        memberFirstCoordinatorMachineID = memberMpiSize - 1;
 
-        if(m_mpiRank == firstCoordinatorMachine){
+        if(memberMpiRank == memberFirstCoordinatorMachineID){
             mrole = machineRoleCoordinator;
         }
-        else if(m_mpiRank < firstSchedulerMachine){
+        else if(memberMpiRank < memberFirstSchedulerMachineID){
             mrole = machineRoleWorker;
         }
-        else if(m_mpiRank >= firstSchedulerMachine && m_mpiRank < firstCoordinatorMachine){
+        else if(memberMpiRank >= memberFirstSchedulerMachineID && memberMpiRank < memberFirstCoordinatorMachineID){
             mrole = machineRoleScheduler;
         }
 
-        m_machineRole = mrole;
+        memberMachineRole = mrole;
 
         return mrole;
 

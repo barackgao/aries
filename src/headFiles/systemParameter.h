@@ -47,9 +47,9 @@ public:
 
     //TODO: 成员函数
     void print(void);
-    void init(int argc,char* argv[],int mpiRank, int mpiSize, int workerMachineNumber, int schedulerMachineNumber);
-    void createConfigFile(int mpiRank, int mpiSize, int workerMachineNumber, int schedulerMachineNumber);
-    void utilGetTokens(const std::string& str, const std::string& delim, std::vector<std::string>& parts);
+    void init(int argc,char* argv[],int mpiRank, int mpiSize);
+    void createConfigFile(int mpiRank, int mpiSize);
+    void utilGetTokens(const std::string& str, const std::string& delimiter, std::vector<std::string>& tokens);
 };
 
 #endif //ARIES_SYSTEMPARAMETER_H

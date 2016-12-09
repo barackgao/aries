@@ -15,6 +15,8 @@
 #include "struct.h"
 #include "systemParameter.h"
 
+DECLARE_int32(schedulerMachineNumber);
+
 class network{
 public:
     //TODO: 成员变量
