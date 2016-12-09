@@ -1,4 +1,5 @@
 #include "../headFiles/main.h"
+#include "../headFiles/network.h"
 
 DEFINE_string(outputFileCoefficient, "./output/coeff.out", "output file name to store non-zero coefficient");
 DEFINE_string(logFile, "./output/output.log", "log file to record objective value per freq");
@@ -37,8 +38,6 @@ void printFlags() {
 
 int main(int argc, char* argv[]) {
     gflags::ParseCommandLineFlags(&argc, &argv, false);
-
-//    sharedCtx *ctx = networkInit(argc, argv);
 
     return 0;
 }

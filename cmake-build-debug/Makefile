@@ -123,6 +123,60 @@ aries/fast:
 	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/build
 .PHONY : aries/fast
 
+src/sourceFiles/machineLink.o: src/sourceFiles/machineLink.cpp.o
+
+.PHONY : src/sourceFiles/machineLink.o
+
+# target to build an object file
+src/sourceFiles/machineLink.cpp.o:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o
+.PHONY : src/sourceFiles/machineLink.cpp.o
+
+src/sourceFiles/machineLink.i: src/sourceFiles/machineLink.cpp.i
+
+.PHONY : src/sourceFiles/machineLink.i
+
+# target to preprocess a source file
+src/sourceFiles/machineLink.cpp.i:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.i
+.PHONY : src/sourceFiles/machineLink.cpp.i
+
+src/sourceFiles/machineLink.s: src/sourceFiles/machineLink.cpp.s
+
+.PHONY : src/sourceFiles/machineLink.s
+
+# target to generate assembly for a file
+src/sourceFiles/machineLink.cpp.s:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.s
+.PHONY : src/sourceFiles/machineLink.cpp.s
+
+src/sourceFiles/machineNode.o: src/sourceFiles/machineNode.cpp.o
+
+.PHONY : src/sourceFiles/machineNode.o
+
+# target to build an object file
+src/sourceFiles/machineNode.cpp.o:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o
+.PHONY : src/sourceFiles/machineNode.cpp.o
+
+src/sourceFiles/machineNode.i: src/sourceFiles/machineNode.cpp.i
+
+.PHONY : src/sourceFiles/machineNode.i
+
+# target to preprocess a source file
+src/sourceFiles/machineNode.cpp.i:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.i
+.PHONY : src/sourceFiles/machineNode.cpp.i
+
+src/sourceFiles/machineNode.s: src/sourceFiles/machineNode.cpp.s
+
+.PHONY : src/sourceFiles/machineNode.s
+
+# target to generate assembly for a file
+src/sourceFiles/machineNode.cpp.s:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.s
+.PHONY : src/sourceFiles/machineNode.cpp.s
+
 src/sourceFiles/main.o: src/sourceFiles/main.cpp.o
 
 .PHONY : src/sourceFiles/main.o
@@ -149,6 +203,33 @@ src/sourceFiles/main.s: src/sourceFiles/main.cpp.s
 src/sourceFiles/main.cpp.s:
 	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/main.cpp.s
 .PHONY : src/sourceFiles/main.cpp.s
+
+src/sourceFiles/network.o: src/sourceFiles/network.cpp.o
+
+.PHONY : src/sourceFiles/network.o
+
+# target to build an object file
+src/sourceFiles/network.cpp.o:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o
+.PHONY : src/sourceFiles/network.cpp.o
+
+src/sourceFiles/network.i: src/sourceFiles/network.cpp.i
+
+.PHONY : src/sourceFiles/network.i
+
+# target to preprocess a source file
+src/sourceFiles/network.cpp.i:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/network.cpp.i
+.PHONY : src/sourceFiles/network.cpp.i
+
+src/sourceFiles/network.s: src/sourceFiles/network.cpp.s
+
+.PHONY : src/sourceFiles/network.s
+
+# target to generate assembly for a file
+src/sourceFiles/network.cpp.s:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/network.cpp.s
+.PHONY : src/sourceFiles/network.cpp.s
 
 src/sourceFiles/systemParameter.o: src/sourceFiles/systemParameter.cpp.o
 
@@ -186,9 +267,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... aries"
+	@echo "... src/sourceFiles/machineLink.o"
+	@echo "... src/sourceFiles/machineLink.i"
+	@echo "... src/sourceFiles/machineLink.s"
+	@echo "... src/sourceFiles/machineNode.o"
+	@echo "... src/sourceFiles/machineNode.i"
+	@echo "... src/sourceFiles/machineNode.s"
 	@echo "... src/sourceFiles/main.o"
 	@echo "... src/sourceFiles/main.i"
 	@echo "... src/sourceFiles/main.s"
+	@echo "... src/sourceFiles/network.o"
+	@echo "... src/sourceFiles/network.i"
+	@echo "... src/sourceFiles/network.s"
 	@echo "... src/sourceFiles/systemParameter.o"
 	@echo "... src/sourceFiles/systemParameter.i"
 	@echo "... src/sourceFiles/systemParameter.s"

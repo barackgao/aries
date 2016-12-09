@@ -105,19 +105,97 @@ CMakeFiles/aries.dir/src/sourceFiles/systemParameter.cpp.o.provides: CMakeFiles/
 CMakeFiles/aries.dir/src/sourceFiles/systemParameter.cpp.o.provides.build: CMakeFiles/aries.dir/src/sourceFiles/systemParameter.cpp.o
 
 
+CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o: CMakeFiles/aries.dir/flags.make
+CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o: ../src/sourceFiles/network.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o -c /Users/barackgao/ClionProjects/aries/src/sourceFiles/network.cpp
+
+CMakeFiles/aries.dir/src/sourceFiles/network.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/aries.dir/src/sourceFiles/network.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/barackgao/ClionProjects/aries/src/sourceFiles/network.cpp > CMakeFiles/aries.dir/src/sourceFiles/network.cpp.i
+
+CMakeFiles/aries.dir/src/sourceFiles/network.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/aries.dir/src/sourceFiles/network.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/barackgao/ClionProjects/aries/src/sourceFiles/network.cpp -o CMakeFiles/aries.dir/src/sourceFiles/network.cpp.s
+
+CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.requires:
+
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.requires
+
+CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.provides: CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.requires
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.provides.build
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.provides
+
+CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.provides.build: CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o
+
+
+CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o: CMakeFiles/aries.dir/flags.make
+CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o: ../src/sourceFiles/machineNode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o -c /Users/barackgao/ClionProjects/aries/src/sourceFiles/machineNode.cpp
+
+CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/barackgao/ClionProjects/aries/src/sourceFiles/machineNode.cpp > CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.i
+
+CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/barackgao/ClionProjects/aries/src/sourceFiles/machineNode.cpp -o CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.s
+
+CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.requires:
+
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.requires
+
+CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.provides: CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.requires
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.provides.build
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.provides
+
+CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.provides.build: CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o
+
+
+CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o: CMakeFiles/aries.dir/flags.make
+CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o: ../src/sourceFiles/machineLink.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o -c /Users/barackgao/ClionProjects/aries/src/sourceFiles/machineLink.cpp
+
+CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/barackgao/ClionProjects/aries/src/sourceFiles/machineLink.cpp > CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.i
+
+CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/barackgao/ClionProjects/aries/src/sourceFiles/machineLink.cpp -o CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.s
+
+CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.requires:
+
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.requires
+
+CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.provides: CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.requires
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.provides.build
+.PHONY : CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.provides
+
+CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.provides.build: CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o
+
+
 # Object files for target aries
 aries_OBJECTS = \
 "CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o" \
-"CMakeFiles/aries.dir/src/sourceFiles/systemParameter.cpp.o"
+"CMakeFiles/aries.dir/src/sourceFiles/systemParameter.cpp.o" \
+"CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o" \
+"CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o" \
+"CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o"
 
 # External object files for target aries
 aries_EXTERNAL_OBJECTS =
 
 aries: CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o
 aries: CMakeFiles/aries.dir/src/sourceFiles/systemParameter.cpp.o
+aries: CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o
+aries: CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o
+aries: CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o
 aries: CMakeFiles/aries.dir/build.make
 aries: CMakeFiles/aries.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable aries"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/barackgao/ClionProjects/aries/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable aries"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/aries.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -127,6 +205,9 @@ CMakeFiles/aries.dir/build: aries
 
 CMakeFiles/aries.dir/requires: CMakeFiles/aries.dir/src/sourceFiles/main.cpp.o.requires
 CMakeFiles/aries.dir/requires: CMakeFiles/aries.dir/src/sourceFiles/systemParameter.cpp.o.requires
+CMakeFiles/aries.dir/requires: CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o.requires
+CMakeFiles/aries.dir/requires: CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o.requires
+CMakeFiles/aries.dir/requires: CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o.requires
 
 .PHONY : CMakeFiles/aries.dir/requires
 

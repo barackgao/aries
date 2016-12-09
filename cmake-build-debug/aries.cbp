@@ -80,16 +80,34 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/machineLink.h">
+			<Option target="aries"/>
+		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/machineNode.h">
+			<Option target="aries"/>
+		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/main.h">
 			<Option target="aries"/>
 		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/network.h">
 			<Option target="aries"/>
 		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/struct.h">
+			<Option target="aries"/>
+		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/systemParameter.h">
 			<Option target="aries"/>
 		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/machineLink.cpp">
+			<Option target="aries"/>
+		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/machineNode.cpp">
+			<Option target="aries"/>
+		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/main.cpp">
+			<Option target="aries"/>
+		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/network.cpp">
 			<Option target="aries"/>
 		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/systemParameter.cpp">
