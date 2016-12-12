@@ -836,7 +836,7 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                     //	  pshctx->ps_recvportmap.insert(pair<int, _ringport*>(schedcnt, recvport));
                     //	  schedcnt++;
                 } else if (dstMachineRole == machineRoleWorker) {
-                    memberPsRecvPortMap.insert(std::make_pair(workercnt, (const context *) recvPort));
+                    memberPsRecvPortMap.insert(std::pair(workercnt, recvPort));
                     workercnt++;
                 } else {
                     LOG(INFO) << "PS [Fatal] SRC NODE (" << srcNode
