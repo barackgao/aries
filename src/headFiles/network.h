@@ -112,7 +112,7 @@ public:
 
     void createStarEthernet(zmq::context_t &contextZmq, std::string &cip);
 
-    void createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSize, std::string &cip);
+    void createRingWorkerEthernetAux(zmq::context_t &contextZmq, std::string &cip);
 
     void createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::string &cip, int serverRank);
 

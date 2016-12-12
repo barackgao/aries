@@ -531,7 +531,7 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
     MPI_Barrier(MPI_COMM_WORLD);
 }
 
-void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSize, std::string &cip) {
+void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, std::string &cip) {
     int hwm;
     size_t hwmSize = sizeof(hwm);
 
