@@ -37,7 +37,7 @@ void printFlags() {
 }
 
 int main(int argc, char* argv[]) {
-    gflags::ParseCommandLineFlags(&argc, &argv, false);
+    google::ParseCommandLineFlags(&argc, &argv, false);
 
     network* aries = new network;
     aries->init(argc,argv);

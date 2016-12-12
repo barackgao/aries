@@ -10,7 +10,7 @@ network::network() {}
 
 int network::init(int argc, char **argv) {
     //TODO: 读取命令行参数
-    gflags::ParseCommandLineFlags(&argc, &argv, false);
+    google::ParseCommandLineFlags(&argc, &argv, false);
 
     //TODO: 初始化glog日志环境
     google::InitGoogleLogging(argv[0]);
