@@ -150,6 +150,33 @@ src/sourceFiles/assistFunction.cpp.s:
 	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/assistFunction.cpp.s
 .PHONY : src/sourceFiles/assistFunction.cpp.s
 
+src/sourceFiles/context.o: src/sourceFiles/context.cpp.o
+
+.PHONY : src/sourceFiles/context.o
+
+# target to build an object file
+src/sourceFiles/context.cpp.o:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/context.cpp.o
+.PHONY : src/sourceFiles/context.cpp.o
+
+src/sourceFiles/context.i: src/sourceFiles/context.cpp.i
+
+.PHONY : src/sourceFiles/context.i
+
+# target to preprocess a source file
+src/sourceFiles/context.cpp.i:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/context.cpp.i
+.PHONY : src/sourceFiles/context.cpp.i
+
+src/sourceFiles/context.s: src/sourceFiles/context.cpp.s
+
+.PHONY : src/sourceFiles/context.s
+
+# target to generate assembly for a file
+src/sourceFiles/context.cpp.s:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/context.cpp.s
+.PHONY : src/sourceFiles/context.cpp.s
+
 src/sourceFiles/machineLink.o: src/sourceFiles/machineLink.cpp.o
 
 .PHONY : src/sourceFiles/machineLink.o
@@ -297,6 +324,9 @@ help:
 	@echo "... src/sourceFiles/assistFunction.o"
 	@echo "... src/sourceFiles/assistFunction.i"
 	@echo "... src/sourceFiles/assistFunction.s"
+	@echo "... src/sourceFiles/context.o"
+	@echo "... src/sourceFiles/context.i"
+	@echo "... src/sourceFiles/context.s"
 	@echo "... src/sourceFiles/machineLink.o"
 	@echo "... src/sourceFiles/machineLink.i"
 	@echo "... src/sourceFiles/machineLink.s"

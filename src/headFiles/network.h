@@ -20,6 +20,7 @@
 #include "struct.h"
 #include "systemParameter.h"
 #include "assistFunction.h"
+#include "context.h"
 
 #define ARIES_ZMQ_IO_THREADS 2
 #define MAX_ZMQ_HWM (5000)
@@ -62,29 +63,29 @@ public:
 
     //TODO: star网络拓扑存储结构
     // rank number - ringport map
-    std::map<int, _ringport *> memberSchedulerSendPortMap; // coordinator
-    std::map<int, _ringport *> memberSchedulerRecvPortMap; // coordinator
+    std::map<int, context *> memberSchedulerSendPortMap; // coordinator
+    std::map<int, context *> memberSchedulerRecvPortMap; // coordinator
 
     // star topology only: ring topology does not use this map
-    std::map<int, _ringport *> memberWorkerSendPortMap; // coordinator
-    std::map<int, _ringport *> memberWorkerRecvPortMap; // coordinator
+    std::map<int, context *> memberWorkerSendPortMap; // coordinator
+    std::map<int, context *> memberWorkerRecvPortMap; // coordinator
 
     //worker or scheduler
-    std::map<uint16_t, _ringport *> memberStarRecvPortMap;
-    std::map<uint16_t, _ringport *> memberStarSendPortMap;
+    std::map<uint16_t, context *> memberStarRecvPortMap;
+    std::map<uint16_t, context *> memberStarSendPortMap;
 
     //TODO: ring网络拓扑存储结构
-    std::map<int, _ringport *> memberRingSendPortMap; // coordinator
-    std::map<int, _ringport *> memberRingRecvPortMap; // coordinator
+    std::map<int, context *> memberRingSendPortMap; // coordinator
+    std::map<int, context *> memberRingRecvPortMap; // coordinator
 
     //TODO: ps网络拓扑存储结构
-    std::map<int, _ringport *> memberPsSendPortMap; // ps client/server
-    std::map<int, _ringport *> memberPsRecvPortMap; // ps client/server
+    std::map<int, context *> memberPsSendPortMap; // ps client/server
+    std::map<int, context *> memberPsRecvPortMap; // ps client/server
 
     //TODO: 构造器
     network();
 
-    network(int argc, char *argv[]);
+//    network(int argc, char *argv[]);
 
     //TODO: 成员函数
     int init(int argc, char *argv[]);
@@ -109,7 +110,7 @@ public:
     void parseStarLinkFile(std::string &fileName);
 
 
-    void createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::string &cip);
+    void createStarEthernet(zmq::context_t &contextZmq, std::string &cip);
 
     void createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSize, std::string &cip);
 
@@ -118,7 +119,7 @@ public:
 
     void coordinatorRingWakeUpAux(int dackPort, int rank);
 
-    void workerRingWakeUpAux(int dackPort, int rank)
+    void workerRingWakeUpAux(int dackPort, int rank);
 
 
     int getIDMessage(zmq::socket_t &zport, int rank, int *identity, char *message, int length);

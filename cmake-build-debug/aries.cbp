@@ -83,6 +83,9 @@
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/assistFunction.h">
 			<Option target="aries"/>
 		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/context.h">
+			<Option target="aries"/>
+		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/headFiles/machineLink.h">
 			<Option target="aries"/>
 		</Unit>
@@ -102,6 +105,9 @@
 			<Option target="aries"/>
 		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/assistFunction.cpp">
+			<Option target="aries"/>
+		</Unit>
+		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/context.cpp">
 			<Option target="aries"/>
 		</Unit>
 		<Unit filename="/Users/barackgao/ClionProjects/aries/src/sourceFiles/machineLink.cpp">

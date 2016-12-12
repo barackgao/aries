@@ -6,6 +6,8 @@
 
 network::network() {}
 
+//network::network(int argc, char **argv) {}
+
 int network::init(int argc, char **argv) {
     //TODO: 读取命令行参数
     gflags::ParseCommandLineFlags(&argc, &argv, false);
@@ -19,16 +21,16 @@ int network::init(int argc, char **argv) {
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
-    this->memberMpiRank = mpiRank;
-    this->memberMpiSize = mpiSize;
-    this->memberSchedulerMachineNumber = FLAGS_schedulerMachineNumber;
+    memberMpiRank = mpiRank;
+    memberMpiSize = mpiSize;
+    memberSchedulerMachineNumber = FLAGS_schedulerMachineNumber;
 
     //TODO: 定义角色
     this->findRole();
 
     //TODO: 初始化系统参数和通信句柄
-    this->memberSystemParameter = new systemParameter();
-    this->memberSystemParameter->init(argc, argv, this->memberMpiRank, this->memberMpiSize);
+    memberSystemParameter = new systemParameter();
+    memberSystemParameter->init(argc, argv, memberMpiRank, memberMpiSize);
 
     //TODO: 读入结点信息
     parseNodeFile(memberSystemParameter->memberNodeFileName);
@@ -51,14 +53,14 @@ int network::init(int argc, char **argv) {
     //TODO: zmq句柄配置
     int ioThreads = ARIES_ZMQ_IO_THREADS;
     zmq::context_t *contextzmq = new zmq::context_t(ioThreads);
-    this->memberZmqContext = contextzmq;
+    memberZmqContext = contextzmq;
 
     //TODO: 读入网络结构并初始化
     if (memberSystemParameter->memberTopology.compare("star") == 0) {
         //TODO: 读入星型网络结构
         parseStarLinkFile(memberSystemParameter->memberStarLinkFileName);
         //TODO: 创建星型网络
-        createStarEthernet(*contextzmq, memberMpiSize, memberMachineNodes[memberMpiSize - 1]->memberIP);
+        createStarEthernet(*contextzmq, memberMachineNodes[memberMpiSize - 1]->memberIP);
         //TODO: 读入环型网络结构
         parseStarLinkFile(memberSystemParameter->memberRingLinkFileName);
         //TODO: 创建环型网络结构
@@ -87,6 +89,8 @@ int network::init(int argc, char **argv) {
     MPI_Barrier(MPI_COMM_WORLD);
     LOG(INFO) << " EXIT : in stards_init function MPI RANK :  " << mpiRank << std::endl;
     MPI_Finalize();
+
+    return 0;
 }
 
 int network::findRole() {
@@ -133,7 +137,7 @@ void network::utilFindValidIP(std::string validIP) {
     // Assumption : user provide correct IP addresses
     // TODO: add more user-error proof code
     for(auto const &p : ipList){
-        for(auto const np : this->memberMachineNodes){
+        for(auto const np : memberMachineNodes){
             if(!np.second->memberIP.compare(p)){
                 validIP.append(p);
                 return;
@@ -188,10 +192,10 @@ void network::parseNodeFile(std::string &fileName){
         tmp->memberIP.append(parts[0]);
         tmp->memberID = atoi(parts[1].c_str());
 //        tmp->funcname.append(parts[2]);
-        this->memberMachineNodes[tmp->memberID] = tmp;
+        memberMachineNodes[tmp->memberID] = tmp;
     }
-    if(this->memberMpiRank == 0){
-        for(auto const &p : this->memberMachineNodes){
+    if(memberMpiRank == 0){
+        for(auto const &p : memberMachineNodes){
             LOG(INFO) << "Machine ID(Rank): " << p.first << " -------------------------- ";
             machineNode *tmp = p.second;
             LOG(INFO) << "IP Address: " << tmp->memberIP << std::endl;
@@ -213,10 +217,10 @@ void network::parsePsNodeFile(std::string &fileName) {
         tmp->memberIP.append(parts[0]);
         tmp->memberID = atoi(parts[1].c_str());
 //        tmp->funcname.append(parts[2]);
-        this->memberPsNodes[tmp->memberID] = tmp;
+        memberPsNodes[tmp->memberID] = tmp;
     }
-    if (this->memberMpiRank == 0) {
-        for (auto const &p : this->memberPsNodes) {
+    if (memberMpiRank == 0) {
+        for (auto const &p : memberPsNodes) {
             LOG(INFO) << "@@ PS Machine ID(Rank): " << p.first << " -------------------------- ";
             machineNode *tmp = p.second;
             LOG(INFO) << "@@ PS  IP Address: " << tmp->memberIP << std::endl;
@@ -225,8 +229,6 @@ void network::parsePsNodeFile(std::string &fileName) {
     }
 }
 
-// TODO: make an unified link file format for
-// ring, reverse ring, start topologies
 void network::parsePsLinkFile(std::string &fileName) {
     std::ifstream in(fileName);
     std::string delim(CONF_FILE_DELIMITER);
@@ -243,10 +245,10 @@ void network::parsePsLinkFile(std::string &fileName) {
         tmp->memberDstNode = atoi(parts[2].c_str());
         tmp->memberDstPort = atoi(parts[3].c_str());
         // TODO: if necessary, take port information from the user.
-        this->memberPsLinks[linkCount++] = tmp;
+        memberPsLinks[linkCount++] = tmp;
     }
-    if (this->memberMpiRank == 0) {
-        for (auto const &p : this->memberPsLinks) {
+    if (memberMpiRank == 0) {
+        for (auto const &p : memberPsLinks) {
             LOG(INFO) << "@@ PS Link: " << p.first << " -------------------------- " << std::endl;
             machineLink *tmp = p.second;
             LOG(INFO) << "@@ PS src node: " << tmp->memberSrcNode << "src port: " << tmp->memberSrcPort << std::endl;
@@ -271,10 +273,10 @@ void network::parseStarLinkFile(std::string &fileName){
         tmp->memberDstNode = atoi(parts[2].c_str());
         tmp->memberDstPort = atoi(parts[3].c_str());
         // TODO: if necessary, take port information from the user.
-        this->memberMachineStarLinks[linkCount++] = tmp;
+        memberMachineStarLinks[linkCount++] = tmp;
     }
-    if(this->memberMpiRank == 0){
-        for(auto const &p : this->memberMachineStarLinks){
+    if(memberMpiRank == 0){
+        for(auto const &p : memberMachineStarLinks){
             LOG(INFO) << "Link: " << p.first << " -------------------------- " << std::endl;
             machineLink *tmp = p.second;
             LOG(INFO) << "src node: " << tmp->memberSrcNode << "src port: " << tmp->memberSrcPort << std::endl;
@@ -283,11 +285,11 @@ void network::parseStarLinkFile(std::string &fileName){
     }
 }
 
-void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::string &cip) {
+void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
     int hwm, hwmSend;
     size_t hwmSize = sizeof(hwm);
     size_t hwmSendSize = sizeof(hwmSend);
-    int rank = this->memberMpiRank;
+    int rank = memberMpiRank;
 
     char *buffer = (char *) calloc(sizeof(char), MAX_BUFFER); // max message size is limited to 2048 bytes now
 
@@ -302,16 +304,16 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
 
     if (mrole == machineRoleCoordinator) {
 
-        int schedcnt = 0;
+        int &&schedcnt = 0;
         int workercnt = 0;
         int schedcnt_r = 0;
         int workercnt_r = 0;
 
-        for (auto const &p : this->memberMachineStarLinks) {
+        for (auto const &p : memberMachineStarLinks) {
             machineLink *tmp = p.second;
 
-// for receiving port
-            if (tmp->memberDstNode == this->memberMpiRank) {
+            //TODO: for receiving port
+            if (tmp->memberDstNode == memberMpiRank) {
                 int dstPort = tmp->memberDstPort;
                 int srcNode = tmp->memberSrcNode;
                 zmq::socket_t *pport_s = new zmq::socket_t(contextZmq, ZMQ_ROUTER);
@@ -320,27 +322,27 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
                 sprintf(tmpcstring, "tcp://*:%d", dstPort);
                 pport_s->bind(tmpcstring); // open 5555 for all incomping connection
                 pport_s->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
-                LOG(INFO) << "@@@@@@@ Coordinator rank " << this->memberMpiRank
+                LOG(INFO) << "@@@@@@@ Coordinator rank " << memberMpiRank
                           << " open a port " << tmpcstring
                           << " FOR RECEIVE PORT -- ptr to zmqsocket(" << pport_s
                           << ") HWM(" << hwm
                           << ")" << std::endl;
                 machineRole dstMachRole = this->findRole(srcNode);
-                _ringport *recvPort = new class _ringport;
-                recvPort->ctx = new context((void *) pport_s, machineRoleCoordinator);
+
+                context *recvPort = new context((void *) pport_s, machineRoleCoordinator);
                 if (dstMachRole == machineRoleScheduler) {
-                    this->memberSchedulerRecvPortMap.insert(std::pair<int, _ringport *>(schedcnt, recvPort));
+                    memberSchedulerRecvPortMap.insert(std::make_pair(schedcnt, (const context *) recvPort));
                     schedcnt++;
                 } else if (dstMachRole == machineRoleWorker) {
-                    this->memberWorkerRecvPortMap.insert(std::pair<int, _ringport *>(workercnt, recvPort));
+                    memberWorkerRecvPortMap.insert(std::make_pair(workercnt, (const context *) recvPort));
                     workercnt++;
                 } else {
                     assert(0);
                 }
             }
 
-// for sending port
-            if (tmp->memberSrcNode == this->memberMpiRank) {
+            //TODO: for sending port
+            if (tmp->memberSrcNode == memberMpiRank) {
                 int srcPort = tmp->memberSrcPort;
                 int dstNode = tmp->memberDstNode;
                 zmq::socket_t *pport_s = new zmq::socket_t(contextZmq, ZMQ_ROUTER);
@@ -350,20 +352,20 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
                 pport_s->bind(tmpcstring);
                 pport_s->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
                 pport_s->getsockopt(ZMQ_SNDHWM, (void *) &hwmSend, &hwmSendSize);
-                LOG(INFO) << "Coordinator rank " << this->memberMpiRank
+                LOG(INFO) << "Coordinator rank " << memberMpiRank
                           << " open a port " << tmpcstring
                           << " FOR SEND PORT -- ptr to zmqsocket(" << pport_s
                           << ") RCVHWM(" << hwm
                           << ") SNDHWM(" << hwmSend
                           << ")" << std::endl;
                 machineRole srcMachRole = this->findRole(dstNode);
-                _ringport *sendPort = new class _ringport;
-                sendPort->ctx = new context((void *) pport_s, machineRoleCoordinator);
+
+                context *sendPort = new context((void *) pport_s, machineRoleCoordinator);
                 if (srcMachRole == machineRoleScheduler) {
-                    this->memberSchedulerSendPortMap.insert(std::pair<int, _ringport *>(schedcnt_r, sendPort));
+                    memberSchedulerSendPortMap.insert(std::make_pair(schedcnt_r, (const context *) sendPort));
                     schedcnt_r++;
                 } else if (srcMachRole == machineRoleWorker) {
-                    this->memberWorkerSendPortMap.insert(std::pair<int, _ringport *>(workercnt_r, sendPort));
+                    memberWorkerSendPortMap.insert(std::make_pair(workercnt_r, (const context *) sendPort));
                     workercnt_r++;
                 } else {
                     assert(0);
@@ -372,14 +374,14 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
         }
 
         LOG(INFO) << "[Coordinator] Open ports and start hands shaking worker_recvportsize("
-                  << this->memberWorkerRecvPortMap.size() << ") worker_sendportsize("
-                  << this->memberWorkerSendPortMap.size() << ")" << std::endl;
+                  << memberWorkerRecvPortMap.size() << ") worker_sendportsize("
+                  << memberWorkerSendPortMap.size() << ")" << std::endl;
 
-        for (unsigned int i = 0; i < this->memberWorkerRecvPortMap.size(); i++) {
+        for (unsigned int i = 0; i < memberWorkerRecvPortMap.size(); i++) {
             int id = 1;
-            zmq::socket_t *port_r = this->memberWorkerRecvPortMap[i]->ctx->m_zmqSocket;
+            zmq::socket_t *port_r = memberWorkerRecvPortMap[i]->m_zmqSocket;
             LOG(INFO) << "Coordinator -- wait for " << i
-                      << "th worker RECV out of  " << this->memberWorkerRecvPortMap.size()
+                      << "th worker RECV out of  " << memberWorkerRecvPortMap.size()
                       << "  pport(" << port_r
                       << ")" << std::endl;
 
@@ -392,11 +394,11 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
 
         LOG(INFO) << "[Coordinator @@@@@] finish worker recv port confirm " << std::endl;
 
-        for (unsigned int i = 0; i < this->memberWorkerSendPortMap.size(); i++) {
+        for (unsigned int i = 0; i < memberWorkerSendPortMap.size(); i++) {
             int id = 0;
-            zmq::socket_t *port_r = this->memberWorkerSendPortMap[i]->ctx->m_zmqSocket;
+            zmq::socket_t *port_r = memberWorkerSendPortMap[i]->m_zmqSocket;
             LOG(INFO) << "Coordinator -- wait for " << i
-                      << "th worker SENDPORT out of  " << this->memberWorkerSendPortMap.size()
+                      << "th worker SENDPORT out of  " << memberWorkerSendPortMap.size()
                       << "  pport(" << port_r
                       << ")" << std::endl;
 
@@ -410,12 +412,12 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
         LOG(INFO) << "[Coordinator @@@@@] finish worker send port confirm " << std::endl;
 
 
-        for (unsigned int i = 0; i < this->memberSchedulerRecvPortMap.size(); i++) {
+        for (unsigned int i = 0; i < memberSchedulerRecvPortMap.size(); i++) {
             int id = 1;
-            zmq::socket_t *port_r = this->memberSchedulerRecvPortMap[i]->ctx->m_zmqSocket;
+            zmq::socket_t *port_r = memberSchedulerRecvPortMap[i]->m_zmqSocket;
 
             LOG(INFO) << "Coordinator -- wait for " << i
-                      << "th scheduler RECVPORT out of  " << this->memberSchedulerRecvPortMap.size()
+                      << "th scheduler RECVPORT out of  " << memberSchedulerRecvPortMap.size()
                       << "  pport(" << port_r
                       << ")" << std::endl;
 
@@ -430,11 +432,11 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
         LOG(INFO) << "[Coordinator @@@@@] finish scheduler recv port confirm " << std::endl;
 
 
-        for (unsigned int i = 0; i < this->memberSchedulerSendPortMap.size(); i++) {
+        for (unsigned int i = 0; i < memberSchedulerSendPortMap.size(); i++) {
             int id = 0;
-            zmq::socket_t *port_r = this->memberSchedulerSendPortMap[i]->ctx->m_zmqSocket;
+            zmq::socket_t *port_r = memberSchedulerSendPortMap[i]->m_zmqSocket;
             LOG(INFO) << "Coordinator -- wait for " << i
-                      << "th scheduler SENDPORT out of  " << this->memberSchedulerSendPortMap.size()
+                      << "th scheduler SENDPORT out of  " << memberSchedulerSendPortMap.size()
                       << "  pport(" << port_r
                       << ")" << std::endl;
 
@@ -451,11 +453,11 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
     } else if (mrole == machineRoleWorker or mrole == machineRoleScheduler) {
 
         sleep(2);
-        for (auto const &p : this->memberMachineStarLinks) {
+        for (auto const &p : memberMachineStarLinks) {
             machineLink *tmp = p.second;
 
-// for receiving port
-            if (tmp->memberDstNode == this->memberMpiRank) {
+            //TODO: for receiving port
+            if (tmp->memberDstNode == memberMpiRank) {
                 int srcPort = tmp->memberSrcPort;
                 zmq::socket_t *zport = new zmq::socket_t(contextZmq, ZMQ_DEALER);
                 int *identity = (int *) calloc(1, sizeof(int));
@@ -470,18 +472,18 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
 
                 zport->connect(tmpcstring); // open 5555 for all incomping connection
                 zport->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
-                LOG(INFO) << "RANK rank %d CONNECT a port  " << this->memberMpiRank
+                LOG(INFO) << "RANK rank %d CONNECT a port  " << memberMpiRank
                           << " FOR RECEIVE PORT -- ptr to socket(" << tmpcstring
                           << ") HWM(" << hwm
                           << ") " << std::endl;
 
-                _ringport *recvport = new class _ringport;
-                recvport->ctx = new context((void *) zport, mrole);
-                this->memberStarRecvPortMap.insert(std::pair<int, _ringport *>(0, recvport));
+
+                context *recvPort = new context((void *) zport, mrole);
+                memberStarRecvPortMap.insert(std::make_pair(0, (const context *) recvPort));
             }
 
-// for sending port
-            if (tmp->memberSrcNode == this->memberMpiRank) {
+            //TODO: for sending port
+            if (tmp->memberSrcNode == memberMpiRank) {
                 int dstPort = tmp->memberDstPort;
                 zmq::socket_t *zport = new zmq::socket_t(contextZmq, ZMQ_DEALER);
                 int *identity = (int *) calloc(1, sizeof(int));
@@ -493,27 +495,27 @@ void network::createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::s
 
                 sprintf(tmpcstring, "tcp://%s:%d", cip.c_str(), dstPort);
                 zport->connect(tmpcstring); // open 5555 for all incomping connection
-                LOG(INFO) << "Rank " << this->memberMpiRank
+                LOG(INFO) << "Rank " << memberMpiRank
                           << " CONNECT a port " << tmpcstring
                           << " FOR SEND PORT -- ptr to socket(" << zport
                           << ") " << std::endl;
 
-                _ringport *recvport = new class _ringport;
-                recvport->ctx = new context((void *) zport, mrole);
-                this->memberStarSendPortMap.insert(std::pair<int, _ringport *>(0, recvport));
+
+                context *sendPort = new context((void *) zport, mrole);
+                memberStarSendPortMap.insert(std::pair(0, (const context *) sendPort));
             }
         }
 
         char *buffer = (char *) calloc(sizeof(char), MAX_BUFFER);
         sprintf(buffer, "Heart Beat from rank %d", rank);
         std::string msg(buffer);
-        zmq::socket_t *sendport = this->memberStarSendPortMap[0]->ctx->m_zmqSocket;
+        zmq::socket_t *sendport = memberStarSendPortMap[0]->m_zmqSocket;
         printf("Rank(%d) Send HB to SEND PORT ptr -- socket(%p) \n", rank, sendport);
         cppsSend(*sendport, (void *) msg.c_str(), strlen(msg.c_str()));
         getSingleMessage(*sendport, rank, buffer, MAX_BUFFER);
         LOG(INFO) << "buffer: " << buffer << std::endl;
         LOG(INFO) << "[Rank " << rank << "] got confirm for RECV PORT " << std::endl;
-        zmq::socket_t *recvport = this->memberStarRecvPortMap[0]->ctx->m_zmqSocket;
+        zmq::socket_t *recvport = memberStarRecvPortMap[0]->m_zmqSocket;
         printf("Rank(%d) Send HB to RECV PORT ptr -- socket(%p) \n", rank, recvport);
         cppsSend(*recvport, (void *) msg.c_str(), strlen(msg.c_str()));
         getSingleMessage(*recvport, rank, buffer, MAX_BUFFER);
@@ -560,7 +562,7 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                 continue;
             }
 
-// for receiving port
+            //TODO: for receiving port
             if (tmp->memberDstNode == memberMpiRank) {
                 int dstPort = tmp->memberDstPort;
                 int srcNode = tmp->memberSrcNode;
@@ -577,18 +579,18 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                           << ")" << std::endl;
 
                 machineRole dstMachineRole = this->findRole(srcNode);
-                _ringport *recvport = new class _ringport;
-                recvport->ctx = new context((void *) pport_s, machineRoleCoordinator);
+
+                context *recvPort = new context((void *) pport_s, machineRoleCoordinator);
                 if (dstMachineRole == machineRoleScheduler) {
                     exit(0);
 //                    assert(0);
                 } else if (dstMachineRole == machineRoleWorker) {
                     if (srcNode == (workerMachine - 1)) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        this->memberRingRecvPortMap.insert(std::pair<int, _ringport *>(RDATAPORT, recvport));
+                        memberRingRecvPortMap.insert(std::make_pair(RDATAPORT, (const context *) recvPort));
                     } else if (srcNode == 0) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        this->memberRingRecvPortMap.insert(std::pair<int, _ringport *>(RACKPORT, recvport));
+                        memberRingRecvPortMap.insert(std::make_pair(RACKPORT, (const context *) recvPort));
                     } else {
                         assert(0);
                     }
@@ -597,7 +599,7 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                 }
             }
 
-// for sending port
+            //TODO: for sending port
             if (tmp->memberSrcNode == memberMpiRank) {
                 int dstNode = tmp->memberDstNode;
                 int dstPort = tmp->memberDstPort;
@@ -615,20 +617,20 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                           << ")" << std::endl;
 
                 machineRole srcMachineRole = this->findRole(dstNode);
-                _ringport *sendport = new class _ringport;
-                sendport->ctx = new context((void *) zport, machineRoleCoordinator);
+
+                context *sendPort = new context((void *) zport, machineRoleCoordinator);
                 if (srcMachineRole == machineRoleScheduler) {
 //                    assert(0);
                 } else if (srcMachineRole == machineRoleWorker) {
                     if (dstNode == (workerMachine - 1)) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RACKPORT, sendport));
+                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context*)sendPort));
                     } else if (dstNode == 0) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
                         LOG(INFO) << "coordinator put rdataport into sendport for dstnode " << dstNode
-                                  << " (sendport[" << sendport->ctx
+                                  << " (sendport[" << sendPort
                                   << "]" << std::endl;
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RDATAPORT, sendport));
+                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context*)sendPort));
                     } else {
 //                        assert(0);
                     }
@@ -639,9 +641,9 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
         }
 
 
-        if (this->memberRingSendPortMap.size() != 2) {
+        if (memberRingSendPortMap.size() != 2) {
             LOG(INFO) << "ctx->rank "<< memberMpiRank
-                      <<" breaks rules :  pshctx->ring_sendportmap.size() : " << this->memberRingSendPortMap.size() << std::endl;
+                      <<" breaks rules :  pshctx->ring_sendportmap.size() : " << memberRingSendPortMap.size() << std::endl;
         }
 
 //        assert(pshctx->ring_sendportmap.size() == 2);
@@ -656,13 +658,15 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
 
         for (auto const &p : memberMachineStarLinks) {
             machineLink *tmp = p.second;
-            if ((p.second->memberSrcNode >= firstScheduler and p.second->memberSrcNode < firstScheduler + schedulerMachine) or
+            if ((p.second->memberSrcNode >= firstScheduler and
+                 p.second->memberSrcNode < firstScheduler + schedulerMachine) or
                 // if scheduler related link, skip
-                (p.second->memberDstNode >= firstScheduler and p.second->memberDstNode < firstScheduler + schedulerMachine)) {
+                (p.second->memberDstNode >= firstScheduler and
+                 p.second->memberDstNode < firstScheduler + schedulerMachine)) {
                 continue;
             }
 
-// for receiving port
+            //TODO: for receiving port
             if (tmp->memberDstNode == memberMpiRank) {
                 int dstPort = tmp->memberDstPort;
                 int srcNode = tmp->memberSrcNode;
@@ -679,45 +683,45 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                           << ")" << std::endl;
 
 //mach_role dstmrole = pshctx->find_role(mpi_size, srcnode);
-                _ringport *recvport = new class _ringport;
-                recvport->ctx = new context((void *) pport_s, machineRoleCoordinator);
+
+                context *recvPort = new context((void *) pport_s, machineRoleCoordinator);
 
                 if (memberMpiRank == 0) { // the first worker
                     if (srcNode == firstCoordinator) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        this->memberRingRecvPortMap.insert(
-                                std::pair<int, _ringport *>(RDATAPORT, recvport)); // for data port
+                        memberRingRecvPortMap.insert(
+                                std::make_pair(RDATAPORT, (const context *) recvPort)); // for data port
                     } else {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        this->memberRingRecvPortMap.insert(
-                                std::pair<int, _ringport *>(RACKPORT, recvport)); // for data port
+                        memberRingRecvPortMap.insert(
+                                std::make_pair(RACKPORT, (const context *) recvPort)); // for data port
                     }
                 } else if (memberMpiRank == (workerMachine - 1)) { // the last worker
                     if (srcNode == firstCoordinator) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        this->memberRingRecvPortMap.insert(
-                                std::pair<int, _ringport *>(RACKPORT, recvport)); // for data port
+                        memberRingRecvPortMap.insert(
+                                std::make_pair(RACKPORT, (const context *) recvPort)); // for data port
                     } else {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
 //                        assert(srcnode == (pshctx->rank - 1));
-                        this->memberRingRecvPortMap.insert(
-                                std::pair<int, _ringport *>(RDATAPORT, recvport)); // for data port
+                        memberRingRecvPortMap.insert(
+                                std::make_pair(RDATAPORT, (const context *) recvPort)); // for data port
                     }
                 } else { // workers between the first and last workers.
                     int rank = memberMpiRank;
                     if (srcNode == (rank - 1)) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        this->memberRingRecvPortMap.insert(
-                                std::pair<int, _ringport *>(RDATAPORT, recvport)); // for data port
+                        memberRingRecvPortMap.insert(
+                                std::make_pair(RDATAPORT, (const context *) recvPort)); // for data port
                     } else {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        this->memberRingRecvPortMap.insert(
-                                std::pair<int, _ringport *>(RACKPORT, recvport)); // for data port
+                        memberRingRecvPortMap.insert(
+                                std::make_pair(RACKPORT, (const context *) recvPort)); // for data port
                     }
                 }
             }
 
-// for sending port
+            //TODO: for sending port
             if (tmp->memberSrcNode == memberMpiRank) {
                 int dstNode = tmp->memberDstNode;
                 int dstPort = tmp->memberDstPort;
@@ -728,7 +732,6 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                 int sethwm = MAX_ZMQ_HWM;
                 zport->setsockopt(ZMQ_SNDHWM, &sethwm, sizeof(int));
 
-//sprintf(tmpcstring, "tcp://%s:%d", cip.c_str(), dstport);
                 sprintf(tmpCstring, "tcp://%s:%d", memberMachineNodes[dstNode]->memberIP.c_str(), dstPort);
                 zport->connect(tmpCstring); // open 5555 for all incomping connection
                 LOG(INFO) << "Rank " << memberMpiRank
@@ -736,35 +739,34 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                           << " FOR SEND PORT -- ptr to socket(" << zport
                           << ")" << std::endl;
 
-                _ringport *recvport = new class _ringport;
-                recvport->ctx = new context((void *) zport, mrole);
+                context *sendPort = new context((void *) zport, mrole);
                 if (memberMpiRank == 0) { // the first worker
                     if (dstNode == firstCoordinator) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RACKPORT, recvport));
+                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
                     } else {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
 //                        assert(dstnode == (pshctx->rank +1));
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RDATAPORT, recvport));
+                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
                     }
                 } else if (memberMpiRank == (workerMachine - 1)) { // the last worker
                     if (dstNode == firstCoordinator) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RDATAPORT, recvport));
+                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
                     } else {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
 //                        assert(dstnode == (pshctx->rank - 1));
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RACKPORT, recvport));
+                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
                     }
                 } else { // workers between the first and last workers.
                     int rank = memberMpiRank;
                     if (dstNode == (rank + 1)) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RDATAPORT, recvport));
+                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
                     } else {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
 //                        assert(dstnode == (rank-1));
-                        this->memberRingSendPortMap.insert(std::pair<int, _ringport *>(RACKPORT, recvport));
+                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
                     }
                 }
             }
@@ -825,14 +827,13 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                           << ")" << std::endl;
 
                 machineRole dstMachineRole = this->findRole(srcNode);
-                _ringport *recvPort = new class _ringport;
-                recvPort->ctx = new context((void*)pport_s, machineRoleScheduler);
+                context *recvPort = new context((void*)pport_s, machineRoleScheduler);
                 if(dstMachineRole == machineRoleScheduler){
 //                    assert(0);
                     //	  pshctx->ps_recvportmap.insert(pair<int, _ringport*>(schedcnt, recvport));
                     //	  schedcnt++;
                 }else if(dstMachineRole == machineRoleWorker){
-                    memberPsRecvPortMap.insert(std::pair<int, _ringport*>(workercnt, recvPort));
+                    memberPsRecvPortMap.insert(std::make_pair(workercnt, (const context*)recvPort));
                     workercnt++;
                 }else{
                     LOG(INFO) << "PS [Fatal] SRC NODE (" << srcNode
@@ -863,14 +864,13 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                           << ")" << std::endl;
 
                 machineRole srcMachineRole = this->findRole(dstNode);
-                _ringport *sendport = new class _ringport;
-                sendport->ctx = new context((void*)pport_s, machineRoleScheduler);
+                context *sendport = new context((void*)pport_s, machineRoleScheduler);
                 if(srcMachineRole == machineRoleScheduler){
 //                    assert(0);
                     //	  pshctx->ps_sendportmap.insert(pair<int, _ringport*>(schedcnt_r, sendport));
                     //	  schedcnt_r++;
                 }else if(srcMachineRole == machineRoleWorker){
-                    memberPsSendPortMap.insert(std::pair<int, _ringport*>(workercnt_r, sendport));
+                    memberPsSendPortMap.insert(std::make_pair(workercnt_r, (const context*)sendport));
                     workercnt_r++;
                 }else{
 //                    assert(0);
@@ -884,7 +884,7 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
 
         for(unsigned int i=0; i<memberPsRecvPortMap.size(); i++){
             int id = 1;
-            zmq::socket_t *port_r = memberPsRecvPortMap[i]->ctx->m_zmqSocket;
+            zmq::socket_t *port_r = memberPsRecvPortMap[i]->m_zmqSocket;
             LOG(INFO) << "PS -- wait for "<< i
                       << "th worker RECV out of  " << memberPsSendPortMap.size()
                       << "  pport(" << port_r
@@ -901,7 +901,7 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
 
         for(unsigned int i=0; i<memberPsSendPortMap.size(); i++){
             int id = 0;
-            zmq::socket_t *port_r = memberPsSendPortMap[i]->ctx->m_zmqSocket;
+            zmq::socket_t *port_r = memberPsSendPortMap[i]->m_zmqSocket;
             LOG(INFO) << "Coordinator -- wait for " << i
                       << "th worker SENDPORT out of " << memberPsSendPortMap.size()
                       << " pport(" << port_r
@@ -947,12 +947,11 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                           << ") HWM(" << hwm
                           << ")" << std::endl;
 
-                _ringport *recvport = new class _ringport;
-                recvport->ctx = new context((void*)zport, mrole);
+                context *recvPort = new context((void*)zport, mrole);
 
                 int slotid = memberPsRecvPortMap.size();
                 assert(slotid == slotid_r);
-                memberPsRecvPortMap.insert(std::pair<int, _ringport*>(slotid_r, recvport));
+                memberPsRecvPortMap.insert(std::make_pair(slotid_r, (const context *)recvPort));
             }
 
             // for sending port
@@ -972,12 +971,11 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                           << " FOR SEND PORT -- ptr to socket(" << zport
                           << ") " << std::endl;
 
-                _ringport *recvPort = new class _ringport;
-                recvPort->ctx = new context((void*)zport, mrole);
+                context *recvPort = new context((void*)zport, mrole);
 
                 int slotid = memberPsSendPortMap.size();
                 assert(slotid == slotid_s);
-                memberPsSendPortMap.insert(std::pair<int, _ringport*>(slotid, recvPort));
+                memberPsSendPortMap.insert(std::make_pair(slotid, (const context *)recvPort));
             }
         }
 
@@ -987,12 +985,12 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
         char *buffer = (char *)calloc(sizeof(char), MAX_BUFFER);
         sprintf(buffer, "PS Heart Beat from rank %d", rank);
         std::string msg(buffer);
-        zmq::socket_t *sendport = memberPsSendPortMap[slotid_s]->ctx->m_zmqSocket;
+        zmq::socket_t *sendport = memberPsSendPortMap[slotid_s]->m_zmqSocket;
         printf("PS Rank(%d) Send HB to SEND PORT ptr -- socket(%p) \n", rank, sendport);
         cppsSend(*sendport, (void *)msg.c_str(), strlen(msg.c_str()));
         getSingleMessage(*sendport, rank, buffer, MAX_BUFFER);
 //        strads_msg(OUT, "PS [Rank %d] got confirm for RECV PORT \n", rank);
-        zmq::socket_t *recvport = memberPsRecvPortMap[slotid_r]->ctx->m_zmqSocket;
+        zmq::socket_t *recvport = memberPsRecvPortMap[slotid_r]->m_zmqSocket;
         printf("PS Rank(%d) Send HB to RECV PORT ptr -- socket(%p) \n", rank, recvport);
         cppsSend(*recvport, (void *)msg.c_str(), strlen(msg.c_str()));
         getSingleMessage(*recvport, rank, buffer, MAX_BUFFER);
@@ -1074,11 +1072,11 @@ void network::coordinatorRingWakeUpAux(int dackPort, int rank) {
     char *buffer = (char *) calloc(sizeof(char), MAX_BUFFER);
     sprintf(buffer, "Heart Beat from rank %d", rank);
     std::string msg(buffer);
-    zmq::socket_t *sendport = memberRingSendPortMap[dackPort]->ctx->m_zmqSocket;
+    zmq::socket_t *sendport = memberRingSendPortMap[dackPort]->m_zmqSocket;
     cppsSend(*sendport, (void *) msg.c_str(), strlen(msg.c_str()));
     printf("COORDINATOR Rank(%d) Send HB to SEND PORT ptr -- socket(%p) -- Sending is DONE  \n", rank, sendport);
     int id = 1;
-    zmq::socket_t *port_r = memberRingRecvPortMap[dackPort]->ctx->m_zmqSocket;
+    zmq::socket_t *port_r = memberRingRecvPortMap[dackPort]->m_zmqSocket;
     LOG(INFO) << "[ Coordinator Rank : " << rank
               << " ]  GOT MESSAGE recvport (" << port_r
               << ") " << std::endl;
@@ -1102,11 +1100,11 @@ void network::workerRingWakeUpAux(int dackPort, int rank) {
     char *buffer = (char *) calloc(sizeof(char), MAX_BUFFER);
     sprintf(buffer, "Heart Beat from rank %d", rank);
     std::string msg(buffer);
-    zmq::socket_t *sendport = memberRingSendPortMap[dackPort]->ctx->m_zmqSocket;
+    zmq::socket_t *sendport = memberRingSendPortMap[dackPort]->m_zmqSocket;
     cppsSend(*sendport, (void *) msg.c_str(), strlen(msg.c_str()));
     printf("COORDINATOR Rank(%d) Send HB to SEND PORT ptr -- socket(%p) -- Sending is DONE  \n", rank, sendport);
     int id = 1;
-    zmq::socket_t *port_r = memberRingRecvPortMap[dackPort]->ctx->m_zmqSocket;
+    zmq::socket_t *port_r = memberRingRecvPortMap[dackPort]->m_zmqSocket;
     LOG(INFO) << "[ Rank : " << rank
               << " ]  GOT MESSAGE recvport (" << port_r
               << ")" << std::endl;
