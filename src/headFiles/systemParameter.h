@@ -15,6 +15,7 @@
 #include "../../thirdParty/usr/include/mpi.h"
 
 #include "machineNode.h"
+#include "assistFunction.h"
 
 #define CONF_FILE_DELIMITER "\n \t"
 #define SRCPORT_BASE (47000)
@@ -49,7 +50,6 @@ public:
     void print(void);
     void init(int argc,char* argv[],int mpiRank, int mpiSize);
     void createConfigFile(int mpiRank, int mpiSize);
-    void utilGetTokens(const std::string& str, const std::string& delimiter, std::vector<std::string>& tokens);
 };
 
 #endif //ARIES_SYSTEMPARAMETER_H

@@ -5,7 +5,12 @@
 #ifndef ARIES_NETWORK_H
 #define ARIES_NETWORK_H
 
+#include <ifaddrs.h>
+//#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include "../../thirdParty/usr/include/gflags/gflags.h"
+#include "../../thirdParty/usr/include/zmq.h"
 #include "../../thirdParty/usr/include/zmq.hpp"
 #include "../../thirdParty/usr/include/mpi.h"
 #include "../../thirdParty/usr/include/glog/logging.h"
@@ -14,16 +19,24 @@
 #include "machineLink.h"
 #include "struct.h"
 #include "systemParameter.h"
+#include "assistFunction.h"
+
+#define ARIES_ZMQ_IO_THREADS 2
+#define MAX_ZMQ_HWM (5000)
+#define MAX_BUFFER (1024*16)
+#define MAX_MACH (128)
+#define RDATAPORT 0
+#define RACKPORT 1
 
 DECLARE_int32(schedulerMachineNumber);
 
-class network{
+class network {
 public:
     //TODO: 成员变量
-    systemParameter* memberSystemParameter;
+    systemParameter *memberSystemParameter;
 
     std::map<int, machineNode *> memberMachineNodes; // machine nodes
-    std::map<int, machineLink *> memberMachineLinks; // node graph links
+    std::map<int, machineLink *> memberMachineStarLinks; // node graph links
 //    std::map<int, machineLink *> memberMachineRingLinks; // node graph links
 
     std::map<int, machineNode *> memberPsNodes; // machine nodes for ps configuration
@@ -49,32 +62,72 @@ public:
 
     //TODO: star网络拓扑存储结构
     // rank number - ringport map
-    std::map<int, _ringport *> schedulerSendPortMap; // coordinator
-    std::map<int, _ringport *> schedulerRecvPortMap; // coordinator
+    std::map<int, _ringport *> memberSchedulerSendPortMap; // coordinator
+    std::map<int, _ringport *> memberSchedulerRecvPortMap; // coordinator
 
     // star topology only: ring topology does not use this map
-    std::map<int, _ringport *> workerSendPortMap; // coordinator
-    std::map<int, _ringport *> workerRecvPortMap; // coordinator
+    std::map<int, _ringport *> memberWorkerSendPortMap; // coordinator
+    std::map<int, _ringport *> memberWorkerRecvPortMap; // coordinator
 
     //worker or scheduler
-    std::map<uint16_t, _ringport *> starRecvPortMap;
-    std::map<uint16_t, _ringport *> starSendPortMap;
+    std::map<uint16_t, _ringport *> memberStarRecvPortMap;
+    std::map<uint16_t, _ringport *> memberStarSendPortMap;
 
     //TODO: ring网络拓扑存储结构
-    std::map<int, _ringport *> ringSendPortMap; // coordinator
-    std::map<int, _ringport *> ringRecvPortMap; // coordinator
+    std::map<int, _ringport *> memberRingSendPortMap; // coordinator
+    std::map<int, _ringport *> memberRingRecvPortMap; // coordinator
 
     //TODO: ps网络拓扑存储结构
-    std::map<int, _ringport *> psSendPortMap; // ps client/server
-    std::map<int, _ringport *> psRecvPortMap; // ps client/server
+    std::map<int, _ringport *> memberPsSendPortMap; // ps client/server
+    std::map<int, _ringport *> memberPsRecvPortMap; // ps client/server
 
     //TODO: 构造器
     network();
-    network(int argc, char* argv[]);
+
+    network(int argc, char *argv[]);
 
     //TODO: 成员函数
-    int init(int argc, char* argv[]);
+    int init(int argc, char *argv[]);
+
+
     int findRole();
+
+    machineRole findRole(int nodeID);
+
+
+    void utilFindValidIP(std::string validIP);
+
+    void getIPList(std::vector<std::string> &ipList);
+
+
+    void parseNodeFile(std::string &fileName);
+
+    void parsePsNodeFile(std::string &fileName);
+
+    void parsePsLinkFile(std::string &fileName);
+
+    void parseStarLinkFile(std::string &fileName);
+
+
+    void createStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::string &cip);
+
+    void createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSize, std::string &cip);
+
+    void createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std::string &cip, int serverRank);
+
+
+    void coordinatorRingWakeUpAux(int dackPort, int rank);
+
+    void workerRingWakeUpAux(int dackPort, int rank)
+
+
+    int getIDMessage(zmq::socket_t &zport, int rank, int *identity, char *message, int length);
+
+    int getSingleMessage(zmq::socket_t &zport, int rank, char *message, int length);
+
+    bool cppsSendMore(zmq::socket_t &zport, void *message, int length);
+
+    bool cppsSend(zmq::socket_t &zport, void *message, int length);
 };
 
 #endif //ARIES_NETWORK_H

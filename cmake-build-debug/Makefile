@@ -123,6 +123,33 @@ aries/fast:
 	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/build
 .PHONY : aries/fast
 
+src/sourceFiles/assistFunction.o: src/sourceFiles/assistFunction.cpp.o
+
+.PHONY : src/sourceFiles/assistFunction.o
+
+# target to build an object file
+src/sourceFiles/assistFunction.cpp.o:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/assistFunction.cpp.o
+.PHONY : src/sourceFiles/assistFunction.cpp.o
+
+src/sourceFiles/assistFunction.i: src/sourceFiles/assistFunction.cpp.i
+
+.PHONY : src/sourceFiles/assistFunction.i
+
+# target to preprocess a source file
+src/sourceFiles/assistFunction.cpp.i:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/assistFunction.cpp.i
+.PHONY : src/sourceFiles/assistFunction.cpp.i
+
+src/sourceFiles/assistFunction.s: src/sourceFiles/assistFunction.cpp.s
+
+.PHONY : src/sourceFiles/assistFunction.s
+
+# target to generate assembly for a file
+src/sourceFiles/assistFunction.cpp.s:
+	$(MAKE) -f CMakeFiles/aries.dir/build.make CMakeFiles/aries.dir/src/sourceFiles/assistFunction.cpp.s
+.PHONY : src/sourceFiles/assistFunction.cpp.s
+
 src/sourceFiles/machineLink.o: src/sourceFiles/machineLink.cpp.o
 
 .PHONY : src/sourceFiles/machineLink.o
@@ -267,6 +294,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... aries"
+	@echo "... src/sourceFiles/assistFunction.o"
+	@echo "... src/sourceFiles/assistFunction.i"
+	@echo "... src/sourceFiles/assistFunction.s"
 	@echo "... src/sourceFiles/machineLink.o"
 	@echo "... src/sourceFiles/machineLink.i"
 	@echo "... src/sourceFiles/machineLink.s"

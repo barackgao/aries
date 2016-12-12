@@ -15,13 +15,10 @@ public:
     int memberDstPort;
 
     //TODO: 构造器
+    machineLink();
     machineLink(int srcNode,
                 int srcPort,
                 int dstNode,
-                int dstPort)
-            :memberSrcNode(srcNode),
-             memberSrcPort(srcPort),
-             memberDstNode(dstNode),
-             memberDstPort(dstPort){}
+                int dstPort);
 };
 #endif //ARIES_MACHINELINK_H

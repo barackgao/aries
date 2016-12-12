@@ -4,6 +4,8 @@
 
 #include "../headFiles/machineLink.h"
 
+machineLink::machineLink() {
+}
 machineLink::machineLink(int srcNode,
                          int srcPort,
                          int dstNode,

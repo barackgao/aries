@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/aries.dir/src/sourceFiles/network.cpp.o"
   "CMakeFiles/aries.dir/src/sourceFiles/machineNode.cpp.o"
   "CMakeFiles/aries.dir/src/sourceFiles/machineLink.cpp.o"
+  "CMakeFiles/aries.dir/src/sourceFiles/assistFunction.cpp.o"
   "aries.pdb"
   "aries"
 )
