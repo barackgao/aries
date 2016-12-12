@@ -64,7 +64,7 @@ int network::init(int argc, char **argv) {
         //TODO: 读入环型网络结构
         parseStarLinkFile(memberSystemParameter->memberRingLinkFileName);
         //TODO: 创建环型网络结构
-        createRingWorkerEthernetAux(*contextzmq, mpiSize, memberMachineNodes[memberMpiSize - 1]->memberIP);
+        createRingWorkerEthernetAux(*contextzmq, memberMachineNodes[memberMpiSize - 1]->memberIP);
         LOG(INFO) << "Star Topology is cretaed with " << mpiSize << " machines (processes) " << std::endl;
 
     } else {
