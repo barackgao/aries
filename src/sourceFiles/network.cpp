@@ -119,11 +119,11 @@ int network::findRole() {
 machineRole network::findRole(int nodeID) {
     machineRole mrole = machineRoleUnknown;
 
-    if(nodeID == memberFirstCoordinatorMachineID){
+    if (nodeID == memberFirstCoordinatorMachineID) {
         mrole = machineRoleCoordinator;
-    }else if(nodeID < memberFirstSchedulerMachineID){
+    } else if (nodeID < memberFirstSchedulerMachineID) {
         mrole = machineRoleWorker;
-    }else if(nodeID >= memberFirstSchedulerMachineID && nodeID < memberFirstCoordinatorMachineID){
+    } else if (nodeID >= memberFirstSchedulerMachineID && nodeID < memberFirstCoordinatorMachineID) {
         mrole = machineRoleScheduler;
     }
 
@@ -131,14 +131,14 @@ machineRole network::findRole(int nodeID) {
 }
 
 void network::utilFindValidIP(std::string validIP) {
-    std::vector<std::string>ipList;
+    std::vector<std::string> ipList;
     getIPList(ipList); // get all local abailable ip address
     // try to find matching IP with any IP in the user input.
     // Assumption : user provide correct IP addresses
     // TODO: add more user-error proof code
-    for(auto const &p : ipList){
-        for(auto const np : memberMachineNodes){
-            if(!np.second->memberIP.compare(p)){
+    for (auto const &p : ipList) {
+        for (auto const np : memberMachineNodes) {
+            if (!np.second->memberIP.compare(p)) {
                 validIP.append(p);
                 return;
             }
@@ -179,14 +179,14 @@ void network::getIPList(std::vector<std::string> &ipList) {
     return;
 }
 
-void network::parseNodeFile(std::string &fileName){
+void network::parseNodeFile(std::string &fileName) {
     std::ifstream in(fileName);
     std::string delim(CONF_FILE_DELIMITER);
     std::string linebuffer;
-    while(getline(in, linebuffer)){
+    while (getline(in, linebuffer)) {
         std::vector<std::string> parts;
         utilGetTokens(linebuffer, delim, parts);
-        if(!parts[0].compare("#"))  // skip comment line
+        if (!parts[0].compare("#"))  // skip comment line
             continue;
         machineNode *tmp = new machineNode;
         tmp->memberIP.append(parts[0]);
@@ -194,8 +194,8 @@ void network::parseNodeFile(std::string &fileName){
 //        tmp->funcname.append(parts[2]);
         memberMachineNodes[tmp->memberID] = tmp;
     }
-    if(memberMpiRank == 0){
-        for(auto const &p : memberMachineNodes){
+    if (memberMpiRank == 0) {
+        for (auto const &p : memberMachineNodes) {
             LOG(INFO) << "Machine ID(Rank): " << p.first << " -------------------------- ";
             machineNode *tmp = p.second;
             LOG(INFO) << "IP Address: " << tmp->memberIP << std::endl;
@@ -257,15 +257,15 @@ void network::parsePsLinkFile(std::string &fileName) {
     }
 }
 
-void network::parseStarLinkFile(std::string &fileName){
+void network::parseStarLinkFile(std::string &fileName) {
     std::ifstream in(fileName);
     std::string delim(CONF_FILE_DELIMITER);
     std::string linebuffer;
-    int linkCount=0;
-    while(getline(in, linebuffer)){
+    int linkCount = 0;
+    while (getline(in, linebuffer)) {
         std::vector<std::string> parts;
         utilGetTokens(linebuffer, delim, parts);
-        if(!parts[0].compare("#"))  // skip comment line
+        if (!parts[0].compare("#"))  // skip comment line
             continue;
         machineLink *tmp = new machineLink;
         tmp->memberSrcNode = atoi(parts[0].c_str());
@@ -275,8 +275,8 @@ void network::parseStarLinkFile(std::string &fileName){
         // TODO: if necessary, take port information from the user.
         memberMachineStarLinks[linkCount++] = tmp;
     }
-    if(memberMpiRank == 0){
-        for(auto const &p : memberMachineStarLinks){
+    if (memberMpiRank == 0) {
+        for (auto const &p : memberMachineStarLinks) {
             LOG(INFO) << "Link: " << p.first << " -------------------------- " << std::endl;
             machineLink *tmp = p.second;
             LOG(INFO) << "src node: " << tmp->memberSrcNode << "src port: " << tmp->memberSrcPort << std::endl;
@@ -300,7 +300,7 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
     memset((void *) idcnt_w, 0x0, sizeof(int) * MAX_MACH);
 
     machineRole mrole = memberMachineRole;
-    char *tmpcstring = (char *) calloc(sizeof(char), 128);
+    char *tmpCstring = (char *) calloc(sizeof(char), 128);
 
     if (mrole == machineRoleCoordinator) {
 
@@ -319,11 +319,11 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
                 zmq::socket_t *pport_s = new zmq::socket_t(contextZmq, ZMQ_ROUTER);
                 int setHwm = MAX_ZMQ_HWM;
                 pport_s->setsockopt(ZMQ_RCVHWM, &setHwm, sizeof(int));//设置队列长度
-                sprintf(tmpcstring, "tcp://*:%d", dstPort);
-                pport_s->bind(tmpcstring); // open 5555 for all incomping connection
+                sprintf(tmpCstring, "tcp://*:%d", dstPort);
+                pport_s->bind(tmpCstring); // open 5555 for all incomping connection
                 pport_s->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
                 LOG(INFO) << "@@@@@@@ Coordinator rank " << memberMpiRank
-                          << " open a port " << tmpcstring
+                          << " open a port " << tmpCstring
                           << " FOR RECEIVE PORT -- ptr to zmqsocket(" << pport_s
                           << ") HWM(" << hwm
                           << ")" << std::endl;
@@ -348,12 +348,12 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
                 zmq::socket_t *pport_s = new zmq::socket_t(contextZmq, ZMQ_ROUTER);
                 int setHwm = MAX_ZMQ_HWM;
                 pport_s->setsockopt(ZMQ_SNDHWM, &setHwm, sizeof(int));//设置队列长度
-                sprintf(tmpcstring, "tcp://*:%d", srcPort);
-                pport_s->bind(tmpcstring);
+                sprintf(tmpCstring, "tcp://*:%d", srcPort);
+                pport_s->bind(tmpCstring);
                 pport_s->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
                 pport_s->getsockopt(ZMQ_SNDHWM, (void *) &hwmSend, &hwmSendSize);
                 LOG(INFO) << "Coordinator rank " << memberMpiRank
-                          << " open a port " << tmpcstring
+                          << " open a port " << tmpCstring
                           << " FOR SEND PORT -- ptr to zmqsocket(" << pport_s
                           << ") RCVHWM(" << hwm
                           << ") SNDHWM(" << hwmSend
@@ -468,12 +468,12 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
                 *sethwm = MAX_ZMQ_HWM;
                 zport->setsockopt(ZMQ_RCVHWM, sethwm, sizeof(int));
 
-                sprintf(tmpcstring, "tcp://%s:%d", cip.c_str(), srcPort);
+                sprintf(tmpCstring, "tcp://%s:%d", cip.c_str(), srcPort);
 
-                zport->connect(tmpcstring); // open 5555 for all incomping connection
+                zport->connect(tmpCstring); // open 5555 for all incomping connection
                 zport->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
                 LOG(INFO) << "RANK rank %d CONNECT a port  " << memberMpiRank
-                          << " FOR RECEIVE PORT -- ptr to socket(" << tmpcstring
+                          << " FOR RECEIVE PORT -- ptr to socket(" << tmpCstring
                           << ") HWM(" << hwm
                           << ") " << std::endl;
 
@@ -493,10 +493,10 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
                 int sethwm = MAX_ZMQ_HWM;
                 zport->setsockopt(ZMQ_SNDHWM, &sethwm, sizeof(int));
 
-                sprintf(tmpcstring, "tcp://%s:%d", cip.c_str(), dstPort);
-                zport->connect(tmpcstring); // open 5555 for all incomping connection
+                sprintf(tmpCstring, "tcp://%s:%d", cip.c_str(), dstPort);
+                zport->connect(tmpCstring); // open 5555 for all incomping connection
                 LOG(INFO) << "Rank " << memberMpiRank
-                          << " CONNECT a port " << tmpcstring
+                          << " CONNECT a port " << tmpCstring
                           << " FOR SEND PORT -- ptr to socket(" << zport
                           << ") " << std::endl;
 
@@ -556,9 +556,11 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
         for (auto const &p : memberMachineStarLinks) {
             machineLink *tmp = p.second;
 
-            if ((p.second->memberSrcNode >= firstScheduler and p.second->memberSrcNode < firstScheduler + schedulerMachine) or
+            if ((p.second->memberSrcNode >= firstScheduler and
+                 p.second->memberSrcNode < firstScheduler + schedulerMachine) or
                 // if workers related link, skip
-                (p.second->memberDstNode >= firstScheduler and p.second->memberDstNode < firstScheduler + schedulerMachine)) {
+                (p.second->memberDstNode >= firstScheduler and
+                 p.second->memberDstNode < firstScheduler + schedulerMachine)) {
                 continue;
             }
 
@@ -624,13 +626,13 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
                 } else if (srcMachineRole == machineRoleWorker) {
                     if (dstNode == (workerMachine - 1)) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context*)sendPort));
+                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
                     } else if (dstNode == 0) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
                         LOG(INFO) << "coordinator put rdataport into sendport for dstnode " << dstNode
                                   << " (sendport[" << sendPort
                                   << "]" << std::endl;
-                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context*)sendPort));
+                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
                     } else {
 //                        assert(0);
                     }
@@ -642,8 +644,9 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, int mpiSiz
 
 
         if (memberRingSendPortMap.size() != 2) {
-            LOG(INFO) << "ctx->rank "<< memberMpiRank
-                      <<" breaks rules :  pshctx->ring_sendportmap.size() : " << memberRingSendPortMap.size() << std::endl;
+            LOG(INFO) << "ctx->rank " << memberMpiRank
+                      << " breaks rules :  pshctx->ring_sendportmap.size() : " << memberRingSendPortMap.size()
+                      << std::endl;
         }
 
 //        assert(pshctx->ring_sendportmap.size() == 2);
@@ -790,36 +793,36 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
     size_t hwmSendSize = sizeof(hwmSend);
     int rank = memberMpiRank;
 
-    char *buffer = (char *)calloc(sizeof(char), MAX_BUFFER); // max message size is limited to 2048 bytes now
-    int *idcnt_s = (int *)calloc(sizeof(int), MAX_MACH);
-    memset((void *)idcnt_s, 0x0, sizeof(int)*MAX_MACH);
+    char *buffer = (char *) calloc(sizeof(char), MAX_BUFFER); // max message size is limited to 2048 bytes now
+    int *idcnt_s = (int *) calloc(sizeof(int), MAX_MACH);
+    memset((void *) idcnt_s, 0x0, sizeof(int) * MAX_MACH);
 
-    int *idcnt_w = (int *)calloc(sizeof(int), MAX_MACH);
-    memset((void *)idcnt_w, 0x0, sizeof(int)*MAX_MACH);
+    int *idcnt_w = (int *) calloc(sizeof(int), MAX_MACH);
+    memset((void *) idcnt_w, 0x0, sizeof(int) * MAX_MACH);
 
     machineRole mrole = memberMachineRole;
-    char *tmpCstring = (char *)calloc(sizeof(char), 128);
+    char *tmpCstring = (char *) calloc(sizeof(char), 128);
 
-    if(mrole == machineRoleScheduler){ // ps server
+    if (mrole == machineRoleScheduler) { // ps server
 
-        int schedcnt=0;
-        int workercnt=0;
-        int schedcnt_r=0;
-        int workercnt_r=0;
+        int schedcnt = 0;
+        int workercnt = 0;
+        int schedcnt_r = 0;
+        int workercnt_r = 0;
 
-        for(auto const &p : memberPsLinks){
+        for (auto const &p : memberPsLinks) {
             machineLink *tmp = p.second;
 
             // for receiving port
-            if(tmp->memberDstNode == memberMpiRank){
+            if (tmp->memberDstNode == memberMpiRank) {
                 int dstPort = tmp->memberDstPort;
                 int srcNode = tmp->memberSrcNode;
                 zmq::socket_t *pport_s = new zmq::socket_t(contextZmq, ZMQ_ROUTER);
                 int setHwm = MAX_ZMQ_HWM;
                 pport_s->setsockopt(ZMQ_RCVHWM, &setHwm, sizeof(int));
                 sprintf(tmpCstring, "tcp://*:%d", dstPort);
-                pport_s->bind (tmpCstring); // open 5555 for all incomping connection
-                pport_s->getsockopt(ZMQ_RCVHWM, (void *)&hwm, &hwmSize);
+                pport_s->bind(tmpCstring); // open 5555 for all incomping connection
+                pport_s->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
                 LOG(INFO) << "@@@@@@@ PS rank " << memberMpiRank
                           << " open a port " << tmpCstring
                           << " FOR RECEIVE PORT -- ptr to zmqsocket(" << pport_s
@@ -827,24 +830,24 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                           << ")" << std::endl;
 
                 machineRole dstMachineRole = this->findRole(srcNode);
-                context *recvPort = new context((void*)pport_s, machineRoleScheduler);
-                if(dstMachineRole == machineRoleScheduler){
+                context *recvPort = new context((void *) pport_s, machineRoleScheduler);
+                if (dstMachineRole == machineRoleScheduler) {
 //                    assert(0);
                     //	  pshctx->ps_recvportmap.insert(pair<int, _ringport*>(schedcnt, recvport));
                     //	  schedcnt++;
-                }else if(dstMachineRole == machineRoleWorker){
-                    memberPsRecvPortMap.insert(std::make_pair(workercnt, (const context*)recvPort));
+                } else if (dstMachineRole == machineRoleWorker) {
+                    memberPsRecvPortMap.insert(std::make_pair(workercnt, (const context *) recvPort));
                     workercnt++;
-                }else{
+                } else {
                     LOG(INFO) << "PS [Fatal] SRC NODE (" << srcNode
-                              << ")[dstmrole: "<< dstMachineRole
-                              <<"] rank " << memberMpiRank << std::endl;
+                              << ")[dstmrole: " << dstMachineRole
+                              << "] rank " << memberMpiRank << std::endl;
 //                    assert(0);
                 }
             }
 
             // for sending port
-            if(tmp->memberSrcNode == memberMpiRank){
+            if (tmp->memberSrcNode == memberMpiRank) {
                 int srcPort = tmp->memberSrcPort;
                 int dstNode = tmp->memberDstNode;
                 zmq::socket_t *pport_s = new zmq::socket_t(contextZmq, ZMQ_ROUTER);
@@ -853,26 +856,26 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                 pport_s->setsockopt(ZMQ_RCVHWM, &sethwm, sizeof(int));
 
                 sprintf(tmpCstring, "tcp://*:%d", srcPort);
-                pport_s->bind (tmpCstring);
-                pport_s->getsockopt(ZMQ_RCVHWM, (void *)&hwm, &hwmSize);
-                pport_s->getsockopt(ZMQ_SNDHWM, (void *)&hwmSend, &hwmSendSize);
+                pport_s->bind(tmpCstring);
+                pport_s->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
+                pport_s->getsockopt(ZMQ_SNDHWM, (void *) &hwmSend, &hwmSendSize);
                 LOG(INFO) << "PS rank " << memberMpiRank
-                          << " open a port "<< tmpCstring
+                          << " open a port " << tmpCstring
                           << " FOR SEND PORT -- ptr to zmqsocket(" << pport_s
                           << ") RCVHWM( " << hwm
                           << " ) SNDHWM(" << hwmSend
                           << ")" << std::endl;
 
                 machineRole srcMachineRole = this->findRole(dstNode);
-                context *sendport = new context((void*)pport_s, machineRoleScheduler);
-                if(srcMachineRole == machineRoleScheduler){
+                context *sendport = new context((void *) pport_s, machineRoleScheduler);
+                if (srcMachineRole == machineRoleScheduler) {
 //                    assert(0);
                     //	  pshctx->ps_sendportmap.insert(pair<int, _ringport*>(schedcnt_r, sendport));
                     //	  schedcnt_r++;
-                }else if(srcMachineRole == machineRoleWorker){
-                    memberPsSendPortMap.insert(std::make_pair(workercnt_r, (const context*)sendport));
+                } else if (srcMachineRole == machineRoleWorker) {
+                    memberPsSendPortMap.insert(std::make_pair(workercnt_r, (const context *) sendport));
                     workercnt_r++;
-                }else{
+                } else {
 //                    assert(0);
                 }
             }
@@ -882,24 +885,24 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
 //                   pshctx->worker_recvportmap.size(),
 //                   pshctx->worker_sendportmap.size());
 
-        for(unsigned int i=0; i<memberPsRecvPortMap.size(); i++){
+        for (unsigned int i = 0; i < memberPsRecvPortMap.size(); i++) {
             int id = 1;
             zmq::socket_t *port_r = memberPsRecvPortMap[i]->m_zmqSocket;
-            LOG(INFO) << "PS -- wait for "<< i
+            LOG(INFO) << "PS -- wait for " << i
                       << "th worker RECV out of  " << memberPsSendPortMap.size()
                       << "  pport(" << port_r
                       << ")" << std::endl;
 
             getIDMessage(*port_r, rank, &id, buffer, MAX_BUFFER);
 //            assert(id == 1);
-            cppsSendMore(*port_r, (void *)&id, 4);
+            cppsSendMore(*port_r, (void *) &id, 4);
             std::string msg1("Go");
-            cppsSend(*port_r, (void *)msg1.c_str(), MAX_BUFFER-1);
+            cppsSend(*port_r, (void *) msg1.c_str(), MAX_BUFFER - 1);
         }
 
         LOG(INFO) << "[PS @@@@@] finish worker recv port confirm " << std::endl;
 
-        for(unsigned int i=0; i<memberPsSendPortMap.size(); i++){
+        for (unsigned int i = 0; i < memberPsSendPortMap.size(); i++) {
             int id = 0;
             zmq::socket_t *port_r = memberPsSendPortMap[i]->m_zmqSocket;
             LOG(INFO) << "Coordinator -- wait for " << i
@@ -908,96 +911,96 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                       << ")" << std::endl;
 
             getIDMessage(*port_r, rank, &id, buffer, MAX_BUFFER);
-            cppsSendMore(*port_r, (void *)&id, 4);
+            cppsSendMore(*port_r, (void *) &id, 4);
             std::string msg1("Go");
-            cppsSend(*port_r, (void *)msg1.c_str(), MAX_BUFFER-1);
+            cppsSend(*port_r, (void *) msg1.c_str(), MAX_BUFFER - 1);
         }
         LOG(INFO) << "[PS @@@@@] finish worker send port confirm" << std::endl;
 
 
-    }else if(mrole == machineRoleWorker){
+    } else if (mrole == machineRoleWorker) {
 
         sleep(2);
 
         int slotid_r = memberPsRecvPortMap.size();
         int slotid_s = memberPsSendPortMap.size();
 
-        for(auto const &p : memberPsLinks){
+        for (auto const &p : memberPsLinks) {
             machineLink *tmp = p.second;
 
             // for receiving port
-            if(tmp->memberDstNode == memberMpiRank and tmp->memberSrcNode == serverRank ){
+            if (tmp->memberDstNode == memberMpiRank and tmp->memberSrcNode == serverRank) {
                 int srcport = tmp->memberSrcPort;
                 zmq::socket_t *zport = new zmq::socket_t(contextZmq, ZMQ_DEALER);
-                int *identity = (int *)calloc(1, sizeof(int));
+                int *identity = (int *) calloc(1, sizeof(int));
                 *identity = 1;
-                zport->setsockopt(ZMQ_IDENTITY, (void *)identity, sizeof(int));
+                zport->setsockopt(ZMQ_IDENTITY, (void *) identity, sizeof(int));
 
-                int *sethwm = (int *)calloc(1, sizeof(int));
+                int *sethwm = (int *) calloc(1, sizeof(int));
                 *sethwm = MAX_ZMQ_HWM;
                 zport->setsockopt(ZMQ_RCVHWM, sethwm, sizeof(int));
 
                 //	sprintf(tmpcstring, "tcp://10.54.1.30:%d", srcport);
                 sprintf(tmpCstring, "tcp://%s:%d", cip.c_str(), srcport);
-                zport->connect (tmpCstring); // open 5555 for all incomping connection
-                zport->getsockopt(ZMQ_RCVHWM, (void *)&hwm, &hwmSize);
-                LOG(INFO) << "RANK rank " <<memberMpiRank
+                zport->connect(tmpCstring); // open 5555 for all incomping connection
+                zport->getsockopt(ZMQ_RCVHWM, (void *) &hwm, &hwmSize);
+                LOG(INFO) << "RANK rank " << memberMpiRank
                           << " CONNECT a port  " << tmpCstring
                           << " FOR RECEIVE PORT -- ptr to socket(" << zport
                           << ") HWM(" << hwm
                           << ")" << std::endl;
 
-                context *recvPort = new context((void*)zport, mrole);
+                context *recvPort = new context((void *) zport, mrole);
 
                 int slotid = memberPsRecvPortMap.size();
                 assert(slotid == slotid_r);
-                memberPsRecvPortMap.insert(std::make_pair(slotid_r, (const context *)recvPort));
+                memberPsRecvPortMap.insert(std::make_pair(slotid_r, (const context *) recvPort));
             }
 
             // for sending port
-            if(tmp->memberSrcNode == memberMpiRank and tmp->memberDstNode == serverRank){
+            if (tmp->memberSrcNode == memberMpiRank and tmp->memberDstNode == serverRank) {
                 int dstport = tmp->memberDstPort;
                 zmq::socket_t *zport = new zmq::socket_t(contextZmq, ZMQ_DEALER);
-                int *identity = (int *)calloc(1, sizeof(int));
+                int *identity = (int *) calloc(1, sizeof(int));
                 *identity = 1;
-                zport->setsockopt(ZMQ_IDENTITY, (void *)identity, sizeof(int));
+                zport->setsockopt(ZMQ_IDENTITY, (void *) identity, sizeof(int));
                 int setHwm = MAX_ZMQ_HWM;
                 zport->setsockopt(ZMQ_SNDHWM, &setHwm, sizeof(int));
                 //	sprintf(tmpcstring, "tcp://10.54.1.30:%d", dstport);
                 sprintf(tmpCstring, "tcp://%s:%d", cip.c_str(), dstport);
-                zport->connect (tmpCstring); // open 5555 for all incomping connection
+                zport->connect(tmpCstring); // open 5555 for all incomping connection
                 LOG(INFO) << "Rank " << memberMpiRank
                           << " CONNECT a port " << tmpCstring
                           << " FOR SEND PORT -- ptr to socket(" << zport
                           << ") " << std::endl;
 
-                context *recvPort = new context((void*)zport, mrole);
+                context *recvPort = new context((void *) zport, mrole);
 
                 int slotid = memberPsSendPortMap.size();
                 assert(slotid == slotid_s);
-                memberPsSendPortMap.insert(std::make_pair(slotid, (const context *)recvPort));
+                memberPsSendPortMap.insert(std::make_pair(slotid, (const context *) recvPort));
             }
         }
 
 //        assert((slotid_r+1) == pshctx->ps_recvportmap.size());
 //        assert((slotid_s+1) == pshctx->ps_sendportmap.size());
 
-        char *buffer = (char *)calloc(sizeof(char), MAX_BUFFER);
+        char *buffer = (char *) calloc(sizeof(char), MAX_BUFFER);
         sprintf(buffer, "PS Heart Beat from rank %d", rank);
         std::string msg(buffer);
         zmq::socket_t *sendport = memberPsSendPortMap[slotid_s]->m_zmqSocket;
         printf("PS Rank(%d) Send HB to SEND PORT ptr -- socket(%p) \n", rank, sendport);
-        cppsSend(*sendport, (void *)msg.c_str(), strlen(msg.c_str()));
+        cppsSend(*sendport, (void *) msg.c_str(), strlen(msg.c_str()));
         getSingleMessage(*sendport, rank, buffer, MAX_BUFFER);
 //        strads_msg(OUT, "PS [Rank %d] got confirm for RECV PORT \n", rank);
         zmq::socket_t *recvport = memberPsRecvPortMap[slotid_r]->m_zmqSocket;
         printf("PS Rank(%d) Send HB to RECV PORT ptr -- socket(%p) \n", rank, recvport);
-        cppsSend(*recvport, (void *)msg.c_str(), strlen(msg.c_str()));
+        cppsSend(*recvport, (void *) msg.c_str(), strlen(msg.c_str()));
         getSingleMessage(*recvport, rank, buffer, MAX_BUFFER);
         LOG(INFO) << "PS [Rank " << rank
                   << "] got confirm for SEND PORT " << std::endl;
 
-    }else{
+    } else {
         LOG(INFO) << "PS [Fatal: rank " << rank
                   << "] MACHINE TYPE IS NOT ASSIGNED YET" << std::endl;
 //        assert(0);
