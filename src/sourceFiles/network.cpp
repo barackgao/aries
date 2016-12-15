@@ -23,7 +23,9 @@ int network::init(int argc, char **argv) {
     memberSchedulerMachineNumber = FLAGS_schedulerMachineNumber;
 
     //TODO: 定义角色
-    this->findRole();
+    findRole();
+    std::cout << "!!!!!!!!!!!!!!!" << std::endl;
+    /*
 
     //TODO: 初始化系统参数和通信句柄
     memberSystemParameter = new systemParameter();
@@ -83,6 +85,7 @@ int network::init(int argc, char **argv) {
         }
     }
 
+     */
     MPI_Barrier(MPI_COMM_WORLD);
     LOG(INFO) << " EXIT : in stards_init function MPI RANK :  " << mpiRank << std::endl;
     MPI_Finalize();
@@ -90,7 +93,7 @@ int network::init(int argc, char **argv) {
     return 0;
 }
 
-int network::findRole() {
+void network::findRole() {
     machineRole mrole = machineRoleUnknown;
 
     memberSchedulerMachineNumber = memberSystemParameter->memberSchedulerNumber;
@@ -108,9 +111,6 @@ int network::findRole() {
     }
 
     memberMachineRole = mrole;
-
-    return mrole;
-
 }
 
 machineRole network::findRole(int nodeID) {

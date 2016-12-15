@@ -90,7 +90,7 @@ public:
     int init(int argc, char *argv[]);
 
 
-    int findRole();
+    void findRole();
 
     machineRole findRole(int nodeID);
 
