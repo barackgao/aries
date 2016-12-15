@@ -22,13 +22,13 @@ int network::init(int argc, char **argv) {
     memberMpiSize = mpiSize;
     memberSchedulerMachineNumber = FLAGS_schedulerMachineNumber;
 
-    //TODO: 定义角色
-    findRole();
-    std::cout << "!!!!!!!!!!!!!!!" << std::endl;
-    /*
-
-    //TODO: 初始化系统参数和通信句柄
+    //TODO: 创建参数对象
     memberSystemParameter = new systemParameter();
+
+    //TODO: 定义角色
+    this->findRole();
+
+    //TODO: 初始化系统参数对象
     memberSystemParameter->init(argc, argv, memberMpiRank, memberMpiSize);
 
     //TODO: 读入结点信息
@@ -85,7 +85,6 @@ int network::init(int argc, char **argv) {
         }
     }
 
-     */
     MPI_Barrier(MPI_COMM_WORLD);
     LOG(INFO) << " EXIT : in stards_init function MPI RANK :  " << mpiRank << std::endl;
     MPI_Finalize();
