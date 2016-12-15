@@ -49,7 +49,7 @@ void systemParameter::init(int argc,char* argv[],int mpiRank, int mpiSize){
     google::ParseCommandLineFlags(&argc,&argv,true);
     FLAGS_logtostderr = 1;
 
-    this->memberMachineFileName.append(FLAGS_machineFileName);
+    memberMachineFileName.append(FLAGS_machineFileName);
     this->createConfigFile(mpiRank,mpiSize);
 
 }
@@ -97,8 +97,10 @@ void systemParameter::createConfigFile(int mpiRank, int mpiSize) {
 
     //TODO: 生成结点信息配置文件
     std::ofstream fout(memberNodeFileName);
-    for(int i=0; i < machineNodes.size(); i++){
-        fout << machineNodes[i]->memberIP << " " << machineNodes[i]->memberID /*<< " " << machineNodes[i]->funcname.c_str()*/ << std::endl;
+    for(int i = 0; i < machineNodes.size(); i++){
+        fout << machineNodes[i]->memberIP << " " << machineNodes[i]->memberID
+        //<< " " << machineNodes[i]->funcname.c_str()
+        << std::endl;
     }
     fout.close();
 
@@ -145,9 +147,12 @@ void systemParameter::createConfigFile(int mpiRank, int mpiSize) {
 
     //TODO: 生成ps结点配置文件
     fout.open(memberPsNodeFileName);
-    for(int i = 0; i < machineNodes.size()-1; i++){
-        fout << machineNodes[i]->memberIP << " " << machineNodes[i]->memberID /*<< " " << machineNodes[i]->funcname.c_str()*/ << std::endl;
+    for(int i = 0; i < machineNodes.size()-1; i++) {
+        fout << machineNodes[i]->memberIP << " " << machineNodes[i]->memberID
+             //<< " " << machineNodes[i]->funcname.c_str()
+             << std::endl;
     }
+
     fout.close();
 
     //TODO: 生成ps链接配置文件
