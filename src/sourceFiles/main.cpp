@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
     google::InitGoogleLogging(argv[0]);
     google::InstallFailureSignalHandler();
 
-    LOG(INFO) << "finding role" << std::endl;
+    LOG(INFO) << "!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
     network* aries = new network;
     aries->init(argc,argv);
 

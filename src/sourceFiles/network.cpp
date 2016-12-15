@@ -4,7 +4,8 @@
 
 #include "../headFiles/network.h"
 
-network::network() {}
+network::network() {
+}
 
 //network::network(int argc, char **argv) {}
 
