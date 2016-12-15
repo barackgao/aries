@@ -15,6 +15,7 @@ DEFINE_int64(schedulerMachineNumber, 1, "the number of scheduler machines, by de
 
 systemParameter::systemParameter() {
     memberSchedulerNumber = FLAGS_schedulerMachineNumber;
+    memberTopology.append(FLAGS_topology);
 }
 
 systemParameter::systemParameter(std::string &machineFileName,

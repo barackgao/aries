@@ -86,7 +86,7 @@ int network::init(int argc, char **argv) {
     }
 
     MPI_Barrier(MPI_COMM_WORLD);
-    LOG(INFO) << " EXIT : in stards_init function MPI RANK :  " << mpiRank << std::endl;
+    LOG(INFO) << " EXIT : in network init function MPI RANK :  " << mpiRank << std::endl;
     MPI_Finalize();
 
     return 0;
