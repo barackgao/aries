@@ -28,6 +28,11 @@ void printFlags() {
 int main(int argc, char* argv[]) {
     google::ParseCommandLineFlags(&argc, &argv, false);
 
+    //TODO: 初始化glog日志环境
+    google::InitGoogleLogging(argv[0]);
+    google::InstallFailureSignalHandler();
+
+    LOG(INFO) << "finding role" << std::endl;
     network* aries = new network;
     aries->init(argc,argv);
 

@@ -46,8 +46,6 @@ void systemParameter::print(void) {
 }
 
 void systemParameter::init(int argc,char* argv[],int mpiRank, int mpiSize){
-    google::InitGoogleLogging(argv[0]);
-    google::InstallFailureSignalHandler();
     google::ParseCommandLineFlags(&argc,&argv,true);
     FLAGS_logtostderr = 1;
 

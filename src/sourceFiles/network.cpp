@@ -4,8 +4,6 @@
 
 #include "../headFiles/network.h"
 
-DECLARE_int32(schedulerMachineNumber);
-
 network::network() {}
 
 //network::network(int argc, char **argv) {}
@@ -13,10 +11,6 @@ network::network() {}
 int network::init(int argc, char **argv) {
     //TODO: 读取命令行参数
     google::ParseCommandLineFlags(&argc, &argv, false);
-
-    //TODO: 初始化glog日志环境
-    google::InitGoogleLogging(argv[0]);
-    google::InstallFailureSignalHandler();
 
     //TODO: 初始化mpi
     int mpiRank, mpiSize;
