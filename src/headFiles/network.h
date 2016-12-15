@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 
 #include "../../thirdParty/usr/include/gflags/gflags.h"
+#include "../../thirdParty/usr/include/gflags/gflags_declare.h"
 #include "../../thirdParty/usr/include/zmq.h"
 #include "../../thirdParty/usr/include/zmq.hpp"
 #include "../../thirdParty/usr/include/mpi.h"
@@ -28,8 +29,6 @@
 #define MAX_MACH (128)
 #define RDATAPORT 0
 #define RACKPORT 1
-
-DECLARE_int32(schedulerMachineNumber);
 
 class network {
 public:

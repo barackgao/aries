@@ -4,9 +4,6 @@
 
 #include "../headFiles/systemParameter.h"
 
-DECLARE_string(machineFileName);
-
-/*
 DEFINE_string(machineFileName, "singlemach.vm", "MPI machfile");
 DEFINE_string(nodeFileName, "", "Node Conf file");
 DEFINE_string(starlinkFileName, "", "Link Conf file");
@@ -15,16 +12,6 @@ DEFINE_string(topology, "star", "specify topology : star / ring");
 DEFINE_string(psNodeFileName, "", "PS Node Conf file");
 DEFINE_string(psLinkFileName, "", "PS Link Conf file");
 DEFINE_int64(schedulerMachineNumber, 1, "the number of scheduler machines, by default 1 ");
-
-
-DECLARE_string(nodeFile);
-DECLARE_string(linkFile);
-DECLARE_string(ringLinkFile);
-DECLARE_string(topology);
-DECLARE_string(psNodeFile);
-DECLARE_string(psLinkFile);
-DECLARE_int32(schedulers);
-*/
 
 systemParameter::systemParameter() {
 }
@@ -61,10 +48,10 @@ void systemParameter::print(void) {
 void systemParameter::init(int argc,char* argv[],int mpiRank, int mpiSize){
     google::InitGoogleLogging(argv[0]);
     google::InstallFailureSignalHandler();
-    gflags::ParseCommandLineFlags(&argc,&argv,true);
+    google::ParseCommandLineFlags(&argc,&argv,true);
     FLAGS_logtostderr = 1;
 
-    this->memberMachineFileName.append((const char*) FLAGS_machineFileName);
+    this->memberMachineFileName.append(FLAGS_machineFileName);
     this->createConfigFile(mpiRank,mpiSize);
 
 }

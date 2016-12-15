@@ -4,6 +4,8 @@
 
 #include "../headFiles/network.h"
 
+DECLARE_int32(schedulerMachineNumber);
+
 network::network() {}
 
 //network::network(int argc, char **argv) {}
@@ -331,10 +333,10 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
 
                 context *recvPort = new context((void *) pport_s, machineRoleCoordinator);
                 if (dstMachRole == machineRoleScheduler) {
-                    memberSchedulerRecvPortMap.insert(std::make_pair(schedcnt, (const context *) recvPort));
+                    memberSchedulerRecvPortMap.insert(std::pair<int,context*>(schedcnt, recvPort));
                     schedcnt++;
                 } else if (dstMachRole == machineRoleWorker) {
-                    memberWorkerRecvPortMap.insert(std::make_pair(workercnt, (const context *) recvPort));
+                    memberWorkerRecvPortMap.insert(std::pair<int,context*>(workercnt, recvPort));
                     workercnt++;
                 } else {
                     assert(0);
@@ -362,10 +364,10 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
 
                 context *sendPort = new context((void *) pport_s, machineRoleCoordinator);
                 if (srcMachRole == machineRoleScheduler) {
-                    memberSchedulerSendPortMap.insert(std::make_pair(schedcnt_r, (const context *) sendPort));
+                    memberSchedulerSendPortMap.insert(std::pair<int,context*>(schedcnt_r, sendPort));
                     schedcnt_r++;
                 } else if (srcMachRole == machineRoleWorker) {
-                    memberWorkerSendPortMap.insert(std::make_pair(workercnt_r, (const context *) sendPort));
+                    memberWorkerSendPortMap.insert(std::pair<int,context*>(workercnt_r, sendPort));
                     workercnt_r++;
                 } else {
                     assert(0);
@@ -479,7 +481,7 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
 
 
                 context *recvPort = new context((void *) zport, mrole);
-                memberStarRecvPortMap.insert(std::make_pair(0, (const context *) recvPort));
+                memberStarRecvPortMap.insert(std::pair<int,context*>(0, recvPort));
             }
 
             //TODO: for sending port
@@ -502,7 +504,7 @@ void network::createStarEthernet(zmq::context_t &contextZmq, std::string &cip) {
 
 
                 context *sendPort = new context((void *) zport, mrole);
-                memberStarSendPortMap.insert(std::pair(0, (const context *) sendPort));
+                memberStarSendPortMap.insert(std::pair<int,context*>(0, sendPort));
             }
         }
 
@@ -589,10 +591,10 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, std::strin
                 } else if (dstMachineRole == machineRoleWorker) {
                     if (srcNode == (workerMachine - 1)) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        memberRingRecvPortMap.insert(std::make_pair(RDATAPORT, (const context *) recvPort));
+                        memberRingRecvPortMap.insert(std::pair<int,context*>(RDATAPORT, recvPort));
                     } else if (srcNode == 0) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
-                        memberRingRecvPortMap.insert(std::make_pair(RACKPORT, (const context *) recvPort));
+                        memberRingRecvPortMap.insert(std::pair<int,context*>(RACKPORT, recvPort));
                     } else {
                         assert(0);
                     }
@@ -626,13 +628,13 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, std::strin
                 } else if (srcMachineRole == machineRoleWorker) {
                     if (dstNode == (workerMachine - 1)) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RACKPORT, sendPort));
                     } else if (dstNode == 0) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
                         LOG(INFO) << "coordinator put rdataport into sendport for dstnode " << dstNode
                                   << " (sendport[" << sendPort
                                   << "]" << std::endl;
-                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RDATAPORT, sendPort));
                     } else {
 //                        assert(0);
                     }
@@ -693,33 +695,33 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, std::strin
                     if (srcNode == firstCoordinator) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
                         memberRingRecvPortMap.insert(
-                                std::make_pair(RDATAPORT, (const context *) recvPort)); // for data port
+                                std::pair<int,context*>(RDATAPORT, recvPort)); // for data port
                     } else {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
                         memberRingRecvPortMap.insert(
-                                std::make_pair(RACKPORT, (const context *) recvPort)); // for data port
+                                std::pair<int,context*>(RACKPORT, recvPort)); // for data port
                     }
                 } else if (memberMpiRank == (workerMachine - 1)) { // the last worker
                     if (srcNode == firstCoordinator) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
                         memberRingRecvPortMap.insert(
-                                std::make_pair(RACKPORT, (const context *) recvPort)); // for data port
+                                std::pair<int,context*>(RACKPORT, recvPort)); // for data port
                     } else {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
 //                        assert(srcnode == (pshctx->rank - 1));
                         memberRingRecvPortMap.insert(
-                                std::make_pair(RDATAPORT, (const context *) recvPort)); // for data port
+                                std::pair<int,context*>(RDATAPORT, recvPort)); // for data port
                     }
                 } else { // workers between the first and last workers.
                     int rank = memberMpiRank;
                     if (srcNode == (rank - 1)) {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
                         memberRingRecvPortMap.insert(
-                                std::make_pair(RDATAPORT, (const context *) recvPort)); // for data port
+                                std::pair<int,context*>(RDATAPORT, recvPort)); // for data port
                     } else {
 //                        assert(pshctx->ring_recvportmap.size() < 2);
                         memberRingRecvPortMap.insert(
-                                std::make_pair(RACKPORT, (const context *) recvPort)); // for data port
+                                std::pair<int,context*>(RACKPORT, recvPort)); // for data port
                     }
                 }
             }
@@ -746,30 +748,30 @@ void network::createRingWorkerEthernetAux(zmq::context_t &contextZmq, std::strin
                 if (memberMpiRank == 0) { // the first worker
                     if (dstNode == firstCoordinator) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RACKPORT, sendPort));
                     } else {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
 //                        assert(dstnode == (pshctx->rank +1));
-                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RDATAPORT, sendPort));
                     }
                 } else if (memberMpiRank == (workerMachine - 1)) { // the last worker
                     if (dstNode == firstCoordinator) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RDATAPORT, sendPort));
                     } else {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
 //                        assert(dstnode == (pshctx->rank - 1));
-                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RACKPORT, sendPort));
                     }
                 } else { // workers between the first and last workers.
                     int rank = memberMpiRank;
                     if (dstNode == (rank + 1)) {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
-                        memberRingSendPortMap.insert(std::make_pair(RDATAPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RDATAPORT, sendPort));
                     } else {
 //                        assert(pshctx->ring_sendportmap.size() < 2);
 //                        assert(dstnode == (rank-1));
-                        memberRingSendPortMap.insert(std::make_pair(RACKPORT, (const context *) sendPort));
+                        memberRingSendPortMap.insert(std::pair<int,context*>(RACKPORT, sendPort));
                     }
                 }
             }
@@ -833,10 +835,10 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                 context *recvPort = new context((void *) pport_s, machineRoleScheduler);
                 if (dstMachineRole == machineRoleScheduler) {
 //                    assert(0);
-                    //	  pshctx->ps_recvportmap.insert(pair<int, _ringport*>(schedcnt, recvport));
-                    //	  schedcnt++;
+                    memberPsRecvPortMap.insert(std::pair<int,context*>(schedcnt, recvPort));
+                    schedcnt++;
                 } else if (dstMachineRole == machineRoleWorker) {
-                    memberPsRecvPortMap.insert(std::pair(workercnt, recvPort));
+                    memberPsRecvPortMap.insert(std::pair<int,context*>(workercnt, recvPort));
                     workercnt++;
                 } else {
                     LOG(INFO) << "PS [Fatal] SRC NODE (" << srcNode
@@ -870,10 +872,10 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
                 context *sendport = new context((void *) pport_s, machineRoleScheduler);
                 if (srcMachineRole == machineRoleScheduler) {
 //                    assert(0);
-                    //	  pshctx->ps_sendportmap.insert(pair<int, _ringport*>(schedcnt_r, sendport));
+                    memberPsSendPortMap.insert(std::pair<int,context*>(schedcnt_r, sendport));
                     //	  schedcnt_r++;
                 } else if (srcMachineRole == machineRoleWorker) {
-                    memberPsSendPortMap.insert(std::make_pair(workercnt_r, (const context *) sendport));
+                    memberPsSendPortMap.insert(std::pair<int,context*>(workercnt_r, sendport));
                     workercnt_r++;
                 } else {
 //                    assert(0);
@@ -954,7 +956,7 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
 
                 int slotid = memberPsRecvPortMap.size();
                 assert(slotid == slotid_r);
-                memberPsRecvPortMap.insert(std::make_pair(slotid_r, (const context *) recvPort));
+                memberPsRecvPortMap.insert(std::pair<int,context*>(slotid_r, recvPort));
             }
 
             // for sending port
@@ -978,7 +980,7 @@ void network::createPsStarEthernet(zmq::context_t &contextZmq, int mpiSize, std:
 
                 int slotid = memberPsSendPortMap.size();
                 assert(slotid == slotid_s);
-                memberPsSendPortMap.insert(std::make_pair(slotid, (const context *) recvPort));
+                memberPsSendPortMap.insert(std::pair<int,context*>(slotid, recvPort));
             }
         }
 

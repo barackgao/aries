@@ -17,6 +17,15 @@
 #include "machineNode.h"
 #include "assistFunction.h"
 
+DECLARE_string(machineFileName);
+DECLARE_string(nodeFileName);
+DECLARE_string(starlinkFileName);
+DECLARE_string(ringLinkFileName);
+DECLARE_string(topology);
+DECLARE_string(psNodeFileName);
+DECLARE_string(psLinkFileName);
+DECLARE_int64(schedulerMachineNumber);
+
 #define CONF_FILE_DELIMITER "\n \t"
 #define SRCPORT_BASE (47000)
 #define DETPORT_BASE (38000)
