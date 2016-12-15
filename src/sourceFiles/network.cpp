@@ -44,7 +44,7 @@ int network::init(int argc, char **argv) {
         memberSystemParameter->memberPsNodeFileName.size() > 0) {
         parsePsNodeFile(memberSystemParameter->memberPsNodeFileName);
         parsePsLinkFile(memberSystemParameter->memberPsLinkFileName);
-        LOG(INFO) << "[*****] ps configuration files(node/link) are parsed" << std::endl;
+        LOG(INFO) << "@@ PS Node and Link configuration files(node/link) are parsed" << std::endl;
     } else {
         LOG(INFO) << "No configuration !!!! " << std::endl;
     }

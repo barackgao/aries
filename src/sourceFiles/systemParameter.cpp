@@ -14,6 +14,7 @@ DEFINE_string(psLinkFileName, "", "PS Link Conf file");
 DEFINE_int64(schedulerMachineNumber, 1, "the number of scheduler machines, by default 1 ");
 
 systemParameter::systemParameter() {
+    memberSchedulerNumber = FLAGS_schedulerMachineNumber;
 }
 
 systemParameter::systemParameter(std::string &machineFileName,
@@ -163,7 +164,7 @@ void systemParameter::createConfigFile(int mpiRank, int mpiSize) {
         for(int j = clients; j < clients+servers; j++)
             fout << i << " " << srcPort++ << " " << j << " " << dstPort++ << std::endl;
     }
-    for(int i=0; i<clients; i++){
+    for(int i = 0; i < clients; i++){
         for(int j=clients; j< clients+servers; j++)
             fout << j << " " << srcPort++ << " " << i << " " << dstPort++ << std::endl;
     }
